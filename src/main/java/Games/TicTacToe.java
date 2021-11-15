@@ -20,11 +20,11 @@ public class TicTacToe implements PatternForGames {
     /**
      * символ, которым играет пользователь
      */
-    private char userSign;
+    private char userSign = 'x';
     /**
      * символ, которым играет бот
      */
-    private char AISign;
+    private char AISign = 'o';
 
     /**
      * конструктор класса для инициализации полей
@@ -57,11 +57,31 @@ public class TicTacToe implements PatternForGames {
     }
 
     /**
+     * узнаем значение table
+     * @return table
+     */
+    public char[][] getTable() {
+        return table;
+    }
+
+    /**
+     * позволяет нам самим составлять table
+     * @param sign символ, который хотим поставить
+     * @param x столбец
+     * @param y строка
+     * @return table
+     */
+    public char[][] setTable(char sign, int x, int y) {
+        table[y][x] = sign;
+        return table;
+    }
+
+    /**
      * реализация игровой логики
      */
     @Override
     public void gameLogic() {
-        initializationTable();
+        initializeTable();
         whichSign();
         while (true) {
             userTurn();
@@ -91,7 +111,7 @@ public class TicTacToe implements PatternForGames {
     /**
      * создание игрового поля
      */
-    private void initializationTable() {
+    public void initializeTable() {
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++)
                 table[i][j] = emptyCage;
@@ -154,7 +174,7 @@ public class TicTacToe implements PatternForGames {
      * @param sign крестик или нолик
      * @return true, если сторона выиграла, иначе false
      */
-    private boolean checkIfWin(char sign) {
+    public boolean checkIfWin(char sign) {
         for (int i = 0; i < 3; i++) {
             if ((table[i][0] == sign && table[i][1] == sign && table[i][2] == sign) ||
                     (table[0][i] == sign && table[1][i] == sign && table[2][i] == sign))
@@ -169,7 +189,7 @@ public class TicTacToe implements PatternForGames {
      * нужна в случае ничьи
      * @return true, если поле заполнено, иначе false
      */
-    private boolean isTableFull() {
+    public boolean isTableFull() {
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++)
                 if (table[i][j] == emptyCage)
