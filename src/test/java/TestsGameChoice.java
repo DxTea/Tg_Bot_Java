@@ -13,16 +13,6 @@ public class TestsGameChoice {
     }
 
     /**
-     * тест на запуск Крестиков-Ноликов
-     */
-    @Test
-    void rightExampleTicTacToe() {
-        GameChoice choice = new GameChoice();
-        String actual = choice.whichOne("TicTacToe");
-        Assert.assertEquals("Success TicTacToe", actual);
-    }
-
-    /**
      * тест на неправильный ввод названия
      */
     @Test
