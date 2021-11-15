@@ -1,3 +1,5 @@
+import Games.TicTacToe;
+
 import java.util.Scanner;
 
 /**
@@ -17,7 +19,7 @@ public class GameChoice {
      * @return строку от пользователя
      */
     private String choice() {
-        System.out.println("Выберите игру: Виселица или Крестики-Нолики");
+        System.out.println("Выберите игру: Hangman или TicTacToe");
         System.out.println("Введите одно из предложенных названий");
         Scanner input = new Scanner(System.in);
         return input.nextLine();
@@ -35,7 +37,9 @@ public class GameChoice {
                 result = "Success Hangman";
                 break;
             case ("TicTacToe"):
-                result = "Success TicTacToe";
+                result = "Пока!";
+                TicTacToe game = new TicTacToe();
+                game.gameLogic();
                 break;
             default:
                 result = "Wrong name";
