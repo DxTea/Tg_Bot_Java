@@ -8,14 +8,4 @@ public interface PatternForGames {
      * основная логика игры
      */
     void gameLogic();
-
-    /**
-     * ход игрока
-     */
-    void userTurn();
-
-    /**
-     * ход ИИ
-     */
-    void AITurn();
 }

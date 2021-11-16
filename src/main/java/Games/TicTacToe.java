@@ -131,7 +131,6 @@ public class TicTacToe implements PatternForGames {
     /**
      * ход игрока
      */
-    @Override
     public void userTurn() {
         int x, y;
         do {
@@ -158,7 +157,6 @@ public class TicTacToe implements PatternForGames {
     /**
      * ход ИИ
      */
-    @Override
     public void AITurn() {
         int x, y;
         do {

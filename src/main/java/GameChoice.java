@@ -1,3 +1,4 @@
+import Games.Hangman;
 import Games.TicTacToe;
 
 import java.util.Scanner;
@@ -35,9 +36,10 @@ public class GameChoice {
         switch (gameName){
             case("Hangman"):
                 result = "Success Hangman";
+                Hangman.startingHangman();
                 break;
             case ("TicTacToe"):
-                result = "Пока!";
+                result = "Success TicTacToe!";
                 TicTacToe game = new TicTacToe();
                 game.gameLogic();
                 break;
