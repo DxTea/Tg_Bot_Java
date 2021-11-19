@@ -54,7 +54,7 @@ public class GameChoice {
 
     //игровое подменю
     public static void again() {
-        System.out.println("Wanna try again? \n 1)yes \n 2)menu \n 3)exit");
+        System.out.println("Wanna try again? \n 1) Yes \n 2) Main menu \n 3) Exit");
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
         switch (input) {
