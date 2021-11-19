@@ -20,11 +20,11 @@ public class TicTacToe implements PatternForGames {
     /**
      * символ, которым играет пользователь
      */
-    private char userSign = 'x';
+    private char userSign;
     /**
      * символ, которым играет бот
      */
-    private char AISign = 'o';
+    private char AISign;
 
     /**
      * конструктор класса для инициализации полей
@@ -87,29 +87,31 @@ public class TicTacToe implements PatternForGames {
             userTurn();
             if (checkIfWin(userSign)) {
                 System.out.println("Вы выиграли!");
+                printTable();
                 GameChoice.again();
                 break;
             }
             if (isTableFull()) {
                 System.out.println("Ничья!");
-                //GameChoice.starting();
+                printTable();
+                GameChoice.again();
                 break;
             }
             AITurn();
             printTable();
             if (checkIfWin(AISign)) {
                 System.out.println("Вы проиграли!");
-                //GameChoice.starting();
+                printTable();
+                GameChoice.again();
                 break;
             }
             if (isTableFull()) {
                 System.out.println("Ничья!");
-                //GameChoice.starting();
+                printTable();
+                GameChoice.again();
                 break;
             }
         }
-        System.out.println("GAME OVER");
-        printTable();
     }
 
     /**
@@ -138,12 +140,16 @@ public class TicTacToe implements PatternForGames {
     public void userTurn() {
         int x, y;
         do {
-            System.out.println("Введите номер строки и столбца через пробел");
+            System.out.println("Введите номер строки и стобца через пробел или с новой строки");
             x = scanner.nextInt() - 1;
             y = scanner.nextInt() - 1;
-        }
+        } // мб я сломал мб нет, но теперь он перезаписывает ячейку если ты выбираешь ячейку которая уже ботом занята
+        // не нашел в коде проверку на ввод если 2 хода подряд в одинаковую ячейку пытаться и если введут значение в ячейке
+        // больше 3, так же он принимает значения если их вводить и с новой строки, хз баг это или фичча, но
+        // но в выводе в консоль я поправил и такая возможность теперь естт
+        // так же у тебя столбцы и строки наоборот в таблицу записываались, я исправил, ну и рефакторинг, на гите глянешь логи
         while (isCellValid(x, y));
-        table[y][x] = userSign;
+        table[x][y] = userSign;
     }
 
     /**
