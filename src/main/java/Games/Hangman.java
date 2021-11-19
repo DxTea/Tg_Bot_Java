@@ -1,74 +1,64 @@
-package Games;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Hangman implements PatternForGames {
-    /**
-     * символ для обозначения скрывающихся букв
-     */
-    private static final char hiddenSymbol = '_';
-    /**
-     * количество попыток (допустимых ошибок)
-     */
+    private static final char HIDDEN_WORD = '_';
     private int lives = 5;
-    /**
-     * зашифрованное слово
-     */
-    private String secret;
-    private List<Character> progress, mistakes;
+    private final String secret;
+    private final List<Character> progress;
+    private final List<Character> mistakes;
 
-    /**
-     * конструктор для инициализации полей
-     */
+    //конструктор
     public Hangman(String word) {
         secret = word.toLowerCase();
         progress = new ArrayList<>();
         for (int i = 0; i < secret.length(); i++) {
-            progress.add(hiddenSymbol);
+            progress.add(HIDDEN_WORD);
         }
-        mistakes = new ArrayList<Character>();
+        mistakes = new ArrayList<>();
     }
 
-    /**
-     * набор слов для игры
-     */
-    private static String[] words = {
+    //набор слов для игры
+    private static final String[] words = {
             "пальто", "одиночество", "лопата",
-            "коромысло", "леопард", "кошка"
+            "коромысло", "леопард"
     };
 
+    //случайный выбор слова
     public static String generateWord() {
         return words[(int) (Math.random() * words.length)];
     }
 
-    /**
-     * предлагаем игроку поиграть, начало игры
-     */
-    public static void startingHangman(){
-        Hangman currentGame = null;
+    //запуск игры
+    public static void startingHangman() {
+        Hangman currentGame;
         while (true) {
             String word = generateWord();
             currentGame = new Hangman(word);
             currentGame.gameLogic();
+            again();
+        }
 
-            Scanner scanner = new Scanner(System.in);
-            while (true) {
-                System.out.println("Хотите сыграть ещё раз? +/-");
-                String input = scanner.nextLine();
-                if (input.length() == 1) {
-                    char answer = input.charAt(0);
-                    if (answer == '-') System.exit(0);
-                    if (answer == '+') break;
-                }
+    }
+
+    //игровое подменю
+    public static void again() {
+        System.out.println("Wanna try again? \n 1)yes \n 2)menu \n 3)exit");
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        switch (input) {
+            case ("2") -> GameChoice.starting();
+            case ("3") -> System.exit(0);
+            case ("1") -> startingHangman();
+            default -> {
+                System.out.println("Wrong name \n");
+                again();
             }
         }
     }
 
-    /**
-     * игровая логика, основной метод игры
-     */
+    //игровая логика
     @Override
     public void gameLogic() {
         printProgress();
@@ -85,7 +75,7 @@ public class Hangman implements PatternForGames {
                 } else {
                     if (checkGuess(userVariant)) {
                         System.out.print("Правильно! ");
-                        if (!progress.contains(hiddenSymbol)) {
+                        if (!progress.contains(HIDDEN_WORD)) {
                             System.out.println("Вы выйграли!");
                             break;
                         }
@@ -104,11 +94,7 @@ public class Hangman implements PatternForGames {
         System.out.println("Это было слово: " + secret.toUpperCase());
     }
 
-    /**
-     * проверяем наличие введенного символа в слове
-     * @param userVariant буква пользователя
-     * @return true если буква есть, иначе false
-     */
+    //проверяем наличие введенного символа в слове
     private boolean checkGuess(char userVariant) {
         boolean guessed = false;
         for (int index = secret.indexOf(userVariant); index >= 0; index = secret.indexOf(userVariant, index + 1)) {
@@ -118,9 +104,7 @@ public class Hangman implements PatternForGames {
         return guessed;
     }
 
-    /**
-     * метод показывает прогресс слова, оставшиеся жизни и запрашивает ввод новой буквы
-     */
+    //метод показывает прогресс слова, оставшиеся жизни и запрашивает ввод новой буквы
     private void printProgress() {
         System.out.print("Слово:");
         for (char letter : progress) {
