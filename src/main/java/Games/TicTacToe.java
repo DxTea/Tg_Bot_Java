@@ -7,8 +7,8 @@ import java.util.Scanner;
  * класс реализации игры "Крестики - Нолики"
  */
 public class TicTacToe implements PatternForGames {
-    private Random random;
-    private Scanner scanner;
+    private final Random random;
+    private final Scanner scanner;
     /**
      * обозначение пустого места на поле
      */
@@ -16,7 +16,7 @@ public class TicTacToe implements PatternForGames {
     /**
      * игровое поле
      */
-    private char[][] table;
+    private final char[][] table;
     /**
      * символ, которым играет пользователь
      */
@@ -58,6 +58,7 @@ public class TicTacToe implements PatternForGames {
 
     /**
      * узнаем значение table
+     *
      * @return table
      */
     public char[][] getTable() {
@@ -66,41 +67,44 @@ public class TicTacToe implements PatternForGames {
 
     /**
      * позволяет нам самим составлять table
+     *
      * @param sign символ, который хотим поставить
-     * @param x столбец
-     * @param y строка
-     * @return table
+     * @param x    столбец
+     * @param y    строка
      */
-    public char[][] setTable(char sign, int x, int y) {
+    public void setTable(char sign, int x, int y) {
         table[y][x] = sign;
-        return table;
     }
 
     /**
      * реализация игровой логики
      */
     @Override
-    public void gameLogic() {
+    public void gameLogic() { //раздели логику и запуск игры, как у меня в Hangman чтобы можно было вызывать через TicTacToe.startingTicTacToe();
         initializeTable();
         whichSign();
         while (true) {
             userTurn();
             if (checkIfWin(userSign)) {
                 System.out.println("Вы выиграли!");
+                GameChoice.again();
                 break;
             }
             if (isTableFull()) {
                 System.out.println("Ничья!");
+                //GameChoice.starting();
                 break;
             }
             AITurn();
             printTable();
             if (checkIfWin(AISign)) {
                 System.out.println("Вы проиграли!");
+                //GameChoice.starting();
                 break;
             }
             if (isTableFull()) {
                 System.out.println("Ничья!");
+                //GameChoice.starting();
                 break;
             }
         }
@@ -138,20 +142,21 @@ public class TicTacToe implements PatternForGames {
             x = scanner.nextInt() - 1;
             y = scanner.nextInt() - 1;
         }
-        while (!isCellValid(x, y));
+        while (isCellValid(x, y));
         table[y][x] = userSign;
     }
 
     /**
      * проверяет доступна ли клетка для хода
+     *
      * @param x номер столбца
      * @param y номер строки
      * @return true если доступна, иначе false
      */
     private boolean isCellValid(int x, int y) {
-        if (x < 0 || y < 0 || x >= 3|| y >= 3)
-            return false;
-        return table[y][x] == emptyCage;
+        if (x < 0 || y < 0 || x >= 3 || y >= 3)
+            return true;
+        return table[y][x] != emptyCage;
     }
 
     /**
@@ -163,12 +168,13 @@ public class TicTacToe implements PatternForGames {
             x = random.nextInt(3);
             y = random.nextInt(3);
         }
-        while (!isCellValid(x, y));
+        while (isCellValid(x, y));
         table[y][x] = AISign;
     }
 
     /**
      * проверка на выигрыш одной из сторон
+     *
      * @param sign крестик или нолик
      * @return true, если сторона выиграла, иначе false
      */
@@ -179,12 +185,13 @@ public class TicTacToe implements PatternForGames {
                 return true;
         }
         return ((table[0][0] == sign && table[1][1] == sign && table[2][2] == sign) ||
-                    (table[2][0] == sign && table[1][1] == sign && table[0][2] == sign));
+                (table[2][0] == sign && table[1][1] == sign && table[0][2] == sign));
     }
 
     /**
      * проверка на заполненное поле
      * нужна в случае ничьи
+     *
      * @return true, если поле заполнено, иначе false
      */
     public boolean isTableFull() {
