@@ -1,9 +1,12 @@
+package Games;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Hangman implements PatternForGames {
     private static final char HIDDEN_WORD = '_';
+    private static boolean ext = false;
     private int lives = 5;
     private final String secret;
     private final List<Character> progress;
@@ -33,29 +36,13 @@ public class Hangman implements PatternForGames {
     //запуск игры
     public static void startingHangman() {
         Hangman currentGame;
-        while (true) {
+        while (!ext) {
             String word = generateWord();
             currentGame = new Hangman(word);
             currentGame.gameLogic();
-            again();
+            GameChoice.again();
         }
 
-    }
-
-    //игровое подменю
-    public static void again() {
-        System.out.println("Wanna try again? \n 1)yes \n 2)menu \n 3)exit");
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-        switch (input) {
-            case ("2") -> GameChoice.starting();
-            case ("3") -> System.exit(0);
-            case ("1") -> startingHangman();
-            default -> {
-                System.out.println("Wrong name \n");
-                again();
-            }
-        }
     }
 
     //игровая логика
@@ -77,6 +64,7 @@ public class Hangman implements PatternForGames {
                         System.out.print("Правильно! ");
                         if (!progress.contains(HIDDEN_WORD)) {
                             System.out.println("Вы выйграли!");
+                            ext = true;
                             break;
                         }
                     } else {
@@ -84,6 +72,7 @@ public class Hangman implements PatternForGames {
                         mistakes.add(userVariant);
                         if (--lives == 0) {
                             System.out.println("\nВы проиграли...");
+                            ext = true;
                             break;
                         }
                     }
