@@ -48,8 +48,8 @@ public class TicTacToe implements PatternForGames {
                 break;
             }
             if (symbol == 'o') {
-                userSign = 'x';
-                AISign = 'o';
+                userSign = 'o';
+                AISign = 'x';
                 break;
             }
             System.out.println("Введите повторно");
@@ -72,21 +72,32 @@ public class TicTacToe implements PatternForGames {
      * @param x    столбец
      * @param y    строка
      */
-    public void setTable(char sign, int x, int y) {
+    public char[][] setTable(char sign, int x, int y) {
         table[y][x] = sign;
+        return table;
+    }
+
+    /**
+     * запуск игры
+     */
+    public static void startingTicTacToe(){
+        TicTacToe currentGame = new TicTacToe();
+        currentGame.gameLogic();
     }
 
     /**
      * реализация игровой логики
      */
     @Override
-    public void gameLogic() { //раздели логику и запуск игры, как у меня в Hangman чтобы можно было вызывать через TicTacToe.startingTicTacToe();
+    public void gameLogic() {
         initializeTable();
         whichSign();
+        if (userSign == 'x') userTurn();
         while (true) {
-            userTurn();
-            if (checkIfWin(userSign)) {
-                System.out.println("Вы выиграли!");
+            AITurn();
+            printTable();
+            if (checkIfWin(AISign)) {
+                System.out.println("Вы проиграли!");
                 printTable();
                 GameChoice.again();
                 break;
@@ -97,10 +108,9 @@ public class TicTacToe implements PatternForGames {
                 GameChoice.again();
                 break;
             }
-            AITurn();
-            printTable();
-            if (checkIfWin(AISign)) {
-                System.out.println("Вы проиграли!");
+            userTurn();
+            if (checkIfWin(userSign)) {
+                System.out.println("Вы выиграли!");
                 printTable();
                 GameChoice.again();
                 break;
@@ -139,17 +149,15 @@ public class TicTacToe implements PatternForGames {
      */
     public void userTurn() {
         int x, y;
-        do {
-            System.out.println("Введите номер строки и стобца через пробел или с новой строки");
+        System.out.println("Введите номер столбца и строки (от 1 до 3) через пробел или с новой строки");
+        x = scanner.nextInt() - 1;
+        y = scanner.nextInt() - 1;
+        while (isCellNotValid(x, y)) {
+            System.out.println("Что-то не так. Введите повторно");
             x = scanner.nextInt() - 1;
             y = scanner.nextInt() - 1;
-        } // мб я сломал мб нет, но теперь он перезаписывает ячейку если ты выбираешь ячейку которая уже ботом занята
-        // не нашел в коде проверку на ввод если 2 хода подряд в одинаковую ячейку пытаться и если введут значение в ячейке
-        // больше 3, так же он принимает значения если их вводить и с новой строки, хз баг это или фичча, но
-        // но в выводе в консоль я поправил и такая возможность теперь естт
-        // так же у тебя столбцы и строки наоборот в таблицу записываались, я исправил, ну и рефакторинг, на гите глянешь логи
-        while (isCellValid(x, y));
-        table[x][y] = userSign;
+        }
+        table[y][x] = userSign;
     }
 
     /**
@@ -159,7 +167,7 @@ public class TicTacToe implements PatternForGames {
      * @param y номер строки
      * @return true если доступна, иначе false
      */
-    private boolean isCellValid(int x, int y) {
+    private boolean isCellNotValid(int x, int y) {
         if (x < 0 || y < 0 || x >= 3 || y >= 3)
             return true;
         return table[y][x] != emptyCage;
@@ -170,11 +178,23 @@ public class TicTacToe implements PatternForGames {
      */
     public void AITurn() {
         int x, y;
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++)
+            if (table[i][j] == userSign) {
+                for (int n = -1; n <=1; n++)
+                    for (int m = -1; m <=1; m++) {
+                        if (!isCellNotValid(j + m, i + n)) {
+                            table[i+n][j+m] = AISign;
+                            return;
+                        }
+                    }
+            }
+        }
         do {
             x = random.nextInt(3);
             y = random.nextInt(3);
         }
-        while (isCellValid(x, y));
+        while (isCellNotValid(x, y));
         table[y][x] = AISign;
     }
 

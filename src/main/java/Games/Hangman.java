@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Виселица
+ */
 public class Hangman implements PatternForGames {
     private static final char HIDDEN_WORD = '_';
     private static boolean ext = false;
@@ -12,7 +15,10 @@ public class Hangman implements PatternForGames {
     private final List<Character> progress;
     private final List<Character> mistakes;
 
-    //конструктор
+    /**
+     * конструктор
+     * @param word зашифрованное слово
+     */
     public Hangman(String word) {
         secret = word.toLowerCase();
         progress = new ArrayList<>();
@@ -22,18 +28,25 @@ public class Hangman implements PatternForGames {
         mistakes = new ArrayList<>();
     }
 
-    //набор слов для игры
+    /**
+     * набор слов для игры
+     */
     private static final String[] words = {
             "пальто", "одиночество", "лопата",
             "коромысло", "леопард"
     };
 
-    //случайный выбор слова
+    /**
+     * случайный выбор слова
+     * @return слово
+     */
     public static String generateWord() {
         return words[(int) (Math.random() * words.length)];
     }
 
-    //запуск игры
+    /**
+     * запуск игры
+     */
     public static void startingHangman() {
         Hangman currentGame;
         while (!ext) {
@@ -42,10 +55,11 @@ public class Hangman implements PatternForGames {
             currentGame.gameLogic();
             GameChoice.again();
         }
-
     }
 
-    //игровая логика
+    /**
+     * игровая логика
+     */
     @Override
     public void gameLogic() {
         printProgress();
@@ -83,7 +97,11 @@ public class Hangman implements PatternForGames {
         System.out.println("Это было слово: " + secret.toUpperCase());
     }
 
-    //проверяем наличие введенного символа в слове
+    /**
+     * проверяем наличие введенного символа в слове
+     * @param userVariant буква пользователя
+     * @return true, если буква есть, иначе false
+     */
     private boolean checkGuess(char userVariant) {
         boolean guessed = false;
         for (int index = secret.indexOf(userVariant); index >= 0; index = secret.indexOf(userVariant, index + 1)) {
@@ -93,7 +111,9 @@ public class Hangman implements PatternForGames {
         return guessed;
     }
 
-    //метод показывает прогресс слова, оставшиеся жизни и запрашивает ввод новой буквы
+    /**
+     * метод показывает прогресс слова, оставшиеся жизни и запрашивает ввод новой буквы
+     */
     private void printProgress() {
         System.out.print("Слово:");
         for (char letter : progress) {

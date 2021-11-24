@@ -3,9 +3,15 @@ package Games;
 import java.util.Objects;
 import java.util.Scanner;
 
+/**
+ * класс для выбора игры, основное меню
+ */
 public class GameChoice {
     public static String game = "no game";
 
+    /**
+     * запуск бота
+     */
     public static void starting() {
         System.out.println("\nHello!");
         System.out.println("Print 'help' to get info about bot. \nOr print 'start'.");
@@ -27,12 +33,20 @@ public class GameChoice {
         }
     }
 
+    /**
+     * пользователь выбирает игру
+     * @return строка с номером выбранной игры
+     */
     private static String choice() {
         System.out.println("Choose your game: \nprint number \n 1) Hangman  \n 2) TicTacToe  \n 3) back");
         Scanner input = new Scanner(System.in);
         return input.nextLine();
     }
 
+    /**
+     * запуск выбранной игры
+     * @param gameName номер выбранной игры
+     */
     private static void whichOne(String gameName) {
         switch (gameName) {
             case ("1") -> {
@@ -41,8 +55,7 @@ public class GameChoice {
             }
             case ("2") -> {
                 game = "TicTacToe";
-                TicTacToe game = new TicTacToe();
-                game.gameLogic();
+                TicTacToe.startingTicTacToe();
             }
             case ("3") -> GameChoice.starting();
             default -> {
@@ -52,7 +65,9 @@ public class GameChoice {
         }
     }
 
-    //игровое подменю
+    /**
+     * игровое подменю
+     */
     public static void again() {
         System.out.println("Wanna try again? \n 1) Yes \n 2) Main menu \n 3) Exit");
         Scanner scanner = new Scanner(System.in);
@@ -64,7 +79,7 @@ public class GameChoice {
                 if (Objects.equals(game, "Hangman")) {
                     Hangman.startingHangman();
                 } else if (Objects.equals(game, "TicTacToe")) {
-                    //TicTacToe.startingTicTacToe();
+                    TicTacToe.startingTicTacToe();
                 } else System.out.println("No game selected");
             }
 
