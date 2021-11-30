@@ -47,13 +47,13 @@ public class Hangman implements PatternForGames {
     /**
      * запуск игры
      */
-    public static void startingHangman() {
+    public static void play() {
         Hangman currentGame;
         while (!ext) {
             String word = generateWord();
             currentGame = new Hangman(word);
             currentGame.gameLogic();
-            GameChoice.again();
+            GameChoicer.again();
         }
     }
 

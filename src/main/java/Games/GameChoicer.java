@@ -6,7 +6,7 @@ import java.util.Scanner;
 /**
  * класс для выбора игры, основное меню
  */
-public class GameChoice {
+public class GameChoicer {
     public static String game = "no game";
 
     /**
@@ -22,13 +22,13 @@ public class GameChoice {
                 System.out.println("This is telegram bot with games");
                 System.out.println("List of commands: \n start- to run the bot \n exit- to exit the bot \n help- info about bot \n print anything to continue");
                 input.nextLine();
-                GameChoice.starting();
+                GameChoicer.starting();
             }
             case ("start") -> whichOne(choice());
             case ("exit") -> System.exit(0);
             default -> {
                 System.out.println("Wrong command");
-                GameChoice.starting();
+                GameChoicer.starting();
             }
         }
     }
@@ -51,13 +51,13 @@ public class GameChoice {
         switch (gameName) {
             case ("1") -> {
                 game = "Hangman";
-                Hangman.startingHangman();
+                Hangman.play();
             }
             case ("2") -> {
                 game = "TicTacToe";
                 TicTacToe.startingTicTacToe();
             }
-            case ("3") -> GameChoice.starting();
+            case ("3") -> GameChoicer.starting();
             default -> {
                 System.out.println("Wrong name \n");
                 whichOne(choice());
@@ -73,11 +73,11 @@ public class GameChoice {
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
         switch (input) {
-            case ("2") -> GameChoice.starting();
+            case ("2") -> GameChoicer.starting();
             case ("3") -> System.exit(0);
             case ("1") -> {
                 if (Objects.equals(game, "Hangman")) {
-                    Hangman.startingHangman();
+                    Hangman.play();
                 } else if (Objects.equals(game, "TicTacToe")) {
                     TicTacToe.startingTicTacToe();
                 } else System.out.println("No game selected");

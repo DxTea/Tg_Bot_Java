@@ -99,26 +99,26 @@ public class TicTacToe implements PatternForGames {
             if (checkIfWin(AISign)) {
                 System.out.println("Вы проиграли!");
                 printTable();
-                GameChoice.again();
+                GameChoicer.again();
                 break;
             }
             if (isTableFull()) {
                 System.out.println("Ничья!");
                 printTable();
-                GameChoice.again();
+                GameChoicer.again();
                 break;
             }
             userTurn();
             if (checkIfWin(userSign)) {
                 System.out.println("Вы выиграли!");
                 printTable();
-                GameChoice.again();
+                GameChoicer.again();
                 break;
             }
             if (isTableFull()) {
                 System.out.println("Ничья!");
                 printTable();
-                GameChoice.again();
+                GameChoicer.again();
                 break;
             }
         }
