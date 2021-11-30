@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 /**
- * класс для выбора игры, основное меню
+ * класс для выбора игры, основное меню бота
  */
 public class GameChoicer {
     public static String game = "no game";
