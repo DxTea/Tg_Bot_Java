@@ -6,9 +6,9 @@ import java.util.Scanner;
 /**
  * класс реализации игры "Крестики - Нолики"
  */
-public class TicTacToe implements PatternForGames {
-    private final Random random;
-    private final Scanner scanner;
+public class TicTacToe implements Game {
+    private final Random random = new Random();
+    private final Scanner scanner = new Scanner(System.in);
     /**
      * обозначение пустого места на поле
      */
@@ -16,7 +16,7 @@ public class TicTacToe implements PatternForGames {
     /**
      * игровое поле
      */
-    private final char[][] table;
+    private final char[][] table = new char[3][3];;
     /**
      * символ, которым играет пользователь
      */
@@ -25,15 +25,6 @@ public class TicTacToe implements PatternForGames {
      * символ, которым играет бот
      */
     private char AISign;
-
-    /**
-     * конструктор класса для инициализации полей
-     */
-    public TicTacToe() {
-        table = new char[3][3];
-        random = new Random();
-        scanner = new Scanner(System.in);
-    }
 
     /**
      * игрок выбирает играть крестиками или ноликами
@@ -57,15 +48,6 @@ public class TicTacToe implements PatternForGames {
     }
 
     /**
-     * узнаем значение table
-     *
-     * @return table
-     */
-    public char[][] getTable() {
-        return table;
-    }
-
-    /**
      * позволяет нам самим составлять table
      *
      * @param sign символ, который хотим поставить
@@ -82,14 +64,14 @@ public class TicTacToe implements PatternForGames {
      */
     public static void startingTicTacToe(){
         TicTacToe currentGame = new TicTacToe();
-        currentGame.gameLogic();
+        currentGame.playGame();
     }
 
     /**
      * реализация игровой логики
      */
     @Override
-    public void gameLogic() {
+    public void playGame() {
         initializeTable();
         whichSign();
         if (userSign == 'x') userTurn();

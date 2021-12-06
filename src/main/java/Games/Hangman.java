@@ -7,7 +7,7 @@ import java.util.Scanner;
 /**
  * Виселица
  */
-public class Hangman implements PatternForGames {
+public class Hangman implements Game {
     private static final char HIDDEN_WORD = '_';
     private static boolean ext = false;
     private int lives = 5;
@@ -52,7 +52,7 @@ public class Hangman implements PatternForGames {
         while (!ext) {
             String word = generateWord();
             currentGame = new Hangman(word);
-            currentGame.gameLogic();
+            currentGame.play();
             GameChoicer.again();
         }
     }
@@ -61,7 +61,7 @@ public class Hangman implements PatternForGames {
      * игровая логика
      */
     @Override
-    public void gameLogic() {
+    public void playGame() {
         printProgress();
         Scanner scanner = new Scanner(System.in);
         while (true) {

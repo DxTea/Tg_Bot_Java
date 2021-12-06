@@ -4,18 +4,6 @@ import org.junit.jupiter.api.Test;
 
 public class TestsForTicTacToe {
     /**
-     * тест на ход ИИ
-     */
-    @Test
-    void AITurnTest() {
-        TicTacToe game = new TicTacToe();
-        game.initializeTable();
-        char[][] tableOld = game.getTable().clone();
-        game.AITurn();
-        Assert.assertNotEquals(game.getTable(), tableOld);
-    }
-
-    /**
      * тест на проверку выигрыша
      */
     @Test
