@@ -19,11 +19,3 @@ buildNumber.properties
 .mvn/timing.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
-
-/target/classes/Main.class
-/target/classes/Games/Game.class
-target/classes/Games/GameChoicer.class
-target/classes/Games/Hangman.class
-target/classes/Games/TicTacToe.class
-target/test-classes/TestsForTicTacToe.class
-target/test-classes/TestsGameChoice.class
