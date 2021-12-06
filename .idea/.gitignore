@@ -1,12 +1,12 @@
 # Default ignored files
-/shelf/
-/workspace.xml
-/compiler.xml
-/jarRepositories.xml
-/misc.xml
-/runConfigurations.xml
-/uiDesigner.xml
-/vcs.xml
+shelf/
+workspace.xml
+compiler.xml
+jarRepositories.xml
+misc.xml
+runConfigurations.xml
+uiDesigner.xml
+vcs.xml
 ### Maven template
 target/
 pom.xml.tag
@@ -19,5 +19,3 @@ buildNumber.properties
 .mvn/timing.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
-
-target/classes/Main.class

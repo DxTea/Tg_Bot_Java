@@ -7,26 +7,23 @@ import java.util.Scanner;
 /**
  * Виселица
  */
-//hiddenWordMask- маска скрытого слова. exitFlag- флаг выхода из программы. lives- количество жизней.
-//hiddenWord- скрытое слово. progress- прогресс отгадывания слова. mistakes- неправильные буквы.
 public class Hangman implements PatternForGames {
-    private static final char hiddenWordMask = '_';
-    private static boolean exitFlag = false;
+    private static final char HIDDEN_WORD = '_';
+    private static boolean ext = false;
     private int lives = 5;
-    private final String hiddenWord;
+    private final String secret;
     private final List<Character> progress;
     private final List<Character> mistakes;
 
     /**
      * конструктор
-     *
      * @param word зашифрованное слово
      */
     public Hangman(String word) {
-        hiddenWord = word.toLowerCase();
+        secret = word.toLowerCase();
         progress = new ArrayList<>();
-        for (int i = 0; i < hiddenWord.length(); i++) {
-            progress.add(hiddenWordMask);
+        for (int i = 0; i < secret.length(); i++) {
+            progress.add(HIDDEN_WORD);
         }
         mistakes = new ArrayList<>();
     }
@@ -41,7 +38,6 @@ public class Hangman implements PatternForGames {
 
     /**
      * случайный выбор слова
-     *
      * @return слово
      */
     public static String generateWord() {
@@ -53,7 +49,7 @@ public class Hangman implements PatternForGames {
      */
     public static void play() {
         Hangman currentGame;
-        while (!exitFlag) {
+        while (!ext) {
             String word = generateWord();
             currentGame = new Hangman(word);
             currentGame.gameLogic();
@@ -80,9 +76,9 @@ public class Hangman implements PatternForGames {
                 } else {
                     if (checkGuess(userVariant)) {
                         System.out.print("Правильно! ");
-                        if (!progress.contains(hiddenWordMask)) {
+                        if (!progress.contains(HIDDEN_WORD)) {
                             System.out.println("Вы выйграли!");
-                            exitFlag = true;
+                            ext = true;
                             break;
                         }
                     } else {
@@ -90,7 +86,7 @@ public class Hangman implements PatternForGames {
                         mistakes.add(userVariant);
                         if (--lives == 0) {
                             System.out.println("\nВы проиграли...");
-                            exitFlag = true;
+                            ext = true;
                             break;
                         }
                     }
@@ -98,18 +94,17 @@ public class Hangman implements PatternForGames {
                 }
             }
         }
-        System.out.println("Это было слово: " + hiddenWord.toUpperCase());
+        System.out.println("Это было слово: " + secret.toUpperCase());
     }
 
     /**
      * проверяем наличие введенного символа в слове
-     *
      * @param userVariant буква пользователя
      * @return true, если буква есть, иначе false
      */
     private boolean checkGuess(char userVariant) {
         boolean guessed = false;
-        for (int index = hiddenWord.indexOf(userVariant); index >= 0; index = hiddenWord.indexOf(userVariant, index + 1)) {
+        for (int index = secret.indexOf(userVariant); index >= 0; index = secret.indexOf(userVariant, index + 1)) {
             progress.set(index, userVariant);
             guessed = true;
         }
