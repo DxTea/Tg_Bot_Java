@@ -45,19 +45,21 @@ public class GameChoicer {
 
     /**
      * запуск выбранной игры
-     * @param gameName номер выбранной игры
+     * * @param gameName номер выбранной игры
      */
     private static void whichOne(String gameName) {
-        switch (gameName) {
-            case ("1") -> {
+        GameName chosenGame=GameName.getNameByGameNumber(gameName);
+
+        switch (Objects.requireNonNull(GameName.getNameByGameNumber(gameName))) {
+            case HANGMAN -> {
                 game = "Hangman";
                 Hangman.play();
             }
-            case ("2") -> {
+            case TICTACTOE -> {
                 game = "TicTacToe";
                 TicTacToe.startingTicTacToe();
             }
-            case ("3") -> GameChoicer.starting();
+            case AGAIN -> GameChoicer.starting();
             default -> {
                 System.out.println("Wrong name \n");
                 whichOne(choice());
