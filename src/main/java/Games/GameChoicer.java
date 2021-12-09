@@ -7,8 +7,8 @@ import static Games.ConsoleBotController.givePlayerPossibleChoice;
 public class GameChoicer {
     private static ConsoleBotController m_consoleBotController;
 
-    public GameChoicer(ConsoleBotController consoleBotController){
-        m_consoleBotController=consoleBotController;
+    public GameChoicer(ConsoleBotController consoleBotController) {
+        m_consoleBotController = consoleBotController;
     }
 
     public static void playChosenGame(String gameName) {

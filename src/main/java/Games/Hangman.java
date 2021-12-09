@@ -56,8 +56,8 @@ public class Hangman implements Game {
     private static final String[] words = {
             "пальто", "одиночество", "лопата",
             "коромысло", "леопард", "зебра",
-            "виселица","влюблённость","ноутбук",
-            "рефакторинг","человечество","магазин"
+            "виселица", "влюблённость", "ноутбук",
+            "рефакторинг", "человечество", "магазин"
     };
 
     /**
@@ -89,23 +89,23 @@ public class Hangman implements Game {
     public void playGame() {
         printProgress();
         Scanner scanner = new Scanner(in);
-        for(;;) {
+        for (; ; ) {
             String input = scanner.nextLine().toLowerCase();
             if (input.length() == 1 && Character.isLetter(input.charAt(0))) {
                 char userVariant = input.charAt(0);
                 if (!mistakes.contains(userVariant) && !progress.contains(userVariant)) {
                     if (checkGuess(userVariant)) {
-                        out.print(RIGHT.getOutput()+"\n");
+                        out.print(RIGHT.getOutput() + "\n");
                         if (!progress.contains(hiddenWordMask)) {
                             out.println(WIN.getOutput());
                             exitFlag = true;
                             break;
                         }
                     } else {
-                        out.print(WRONG.getOutput()+"\n");
+                        out.print(WRONG.getOutput() + "\n");
                         mistakes.add(userVariant);
                         if (--lives == 0) {
-                            out.println("\n"+ LOOSE.getOutput());
+                            out.println("\n" + LOOSE.getOutput());
                             exitFlag = true;
                             break;
                         }
@@ -119,7 +119,7 @@ public class Hangman implements Game {
                 out.print(INPUT.getOutput());
             }
         }
-        out.println(ANSWER.getOutput() + hiddenWord.toUpperCase()+"\n");
+        out.println(ANSWER.getOutput() + hiddenWord.toUpperCase() + "\n");
         exitFlag = false;
 
     }
@@ -147,10 +147,10 @@ public class Hangman implements Game {
         for (char letter : progress) {
             out.print(" " + letter);
         }
-        out.print("\n"+ LIFE.getOutput());
+        out.print("\n" + LIFE.getOutput());
         for (int i = 0; i < lives; i++) {
             out.print("💙");
         }
-        out.print("\n\n\n"+ INPUT.getOutput());
+        out.print("\n\n\n" + INPUT.getOutput());
     }
 }

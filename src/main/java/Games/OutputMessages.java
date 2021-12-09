@@ -13,10 +13,12 @@ public enum OutputMessages {
 
 
     private final String output;
+
     OutputMessages(String s) {
-        output =s;
+        output = s;
     }
-    public String getOutput(){
+
+    public String getOutput() {
         return output;
     }
 }

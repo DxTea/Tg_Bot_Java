@@ -49,7 +49,8 @@ public class TicTacToe implements Game {
 
     /**
      * позволяет нам самим составлять table
-     *  @param sign символ, который хотим поставить
+     *
+     * @param sign символ, который хотим поставить
      * @param x    столбец
      * @param y    строка
      */
@@ -60,7 +61,7 @@ public class TicTacToe implements Game {
     /**
      * запуск игры
      */
-    public static void play(){
+    public static void play() {
         TicTacToe currentGame = new TicTacToe();
         currentGame.playGame();
     }
@@ -158,17 +159,17 @@ public class TicTacToe implements Game {
      */
     public void AITurn() {
         int x, y;
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++)
-            if (table[i][j] == userSign) {
-                for (int n = -1; n <=1; n++)
-                    for (int m = -1; m <=1; m++) {
-                        if (!isCellNotValid(j + m, i + n)) {
-                            table[i+n][j+m] = AISign;
-                            return;
+                if (table[i][j] == userSign) {
+                    for (int n = -1; n <= 1; n++)
+                        for (int m = -1; m <= 1; m++) {
+                            if (!isCellNotValid(j + m, i + n)) {
+                                table[i + n][j + m] = AISign;
+                                return;
+                            }
                         }
-                    }
-            }
+                }
         }
         do {
             x = random.nextInt(3);

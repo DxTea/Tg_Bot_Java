@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import static Games.ConsoleBotController.givePlayerPossibleChoice;
 
-public class Start implements Command{
+public class Start implements Command {
 
     public Start(ConsoleBotController consoleBotController) {
     }

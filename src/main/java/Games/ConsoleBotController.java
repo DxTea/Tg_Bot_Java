@@ -83,13 +83,13 @@ public class ConsoleBotController {
     }
 
     private void fillCommands() {
-        commands=new HashMap<>();
+        commands = new HashMap<>();
         commands.put("/start", new Start(this));
         commands.put("/help", new Help(this));
         commands.put("/exit", new Exit(this));
     }
 
     public void setGame(String gameName) {
-        game=gameName;
+        game = gameName;
     }
 }
