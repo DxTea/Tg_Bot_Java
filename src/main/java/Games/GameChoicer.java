@@ -1,95 +1,32 @@
 package Games;
 
+import java.util.Map;
 import java.util.Objects;
-import java.util.Scanner;
 
-/**
- * класс для выбора игры, основное меню бота
- */
+import static Games.ConsoleBotController.givePlayerPossibleChoice;
+
 public class GameChoicer {
-    public static String game = "no game";
+    private static ConsoleBotController m_consoleBotController;
 
-    /**
-     * запуск бота
-     */
-    public static void starting() {
-        System.out.println("\nHello!");
-        System.out.println("Print 'help' to get info about bot. \nOr print 'start'.");
-        Scanner input = new Scanner(System.in);
-        String key = input.nextLine();
-        switch (key) {
-            case ("help") -> {
-                System.out.println("This is telegram bot with games");
-                System.out.println("List of commands: \n start- to run the bot \n exit- to exit the bot \n help- info about bot \n print anything to continue");
-                input.nextLine();
-                GameChoicer.starting();
-            }
-            case ("start") -> whichOne(choice());
-            case ("exit") -> System.exit(0);
-            default -> {
-                System.out.println("Wrong command");
-                GameChoicer.starting();
-            }
-        }
+    public GameChoicer(ConsoleBotController consoleBotController){
+        m_consoleBotController=consoleBotController;
     }
 
-    /**
-     * пользователь выбирает игру
-     * @return строка с номером выбранной игры
-     */
-    private static String choice() {
-        System.out.println("Choose your game: \nprint number \n 1) Hangman  \n 2) TicTacToe  \n 3) back");
-        Scanner input = new Scanner(System.in);
-        return input.nextLine();
-    }
-
-    /**
-     * запуск выбранной игры
-     * * @param gameName номер выбранной игры
-     */
-    private static void whichOne(String gameName) {
-        GameName chosenGame=GameName.getNameByGameNumber(gameName);
-
+    public static void playChosenGame(String gameName) {
         switch (Objects.requireNonNull(GameName.getNameByGameNumber(gameName))) {
             case HANGMAN -> {
-                game = "Hangman";
+                m_consoleBotController.setGame("Hangman");
                 Hangman.play();
             }
             case TICTACTOE -> {
-                game = "TicTacToe";
+                m_consoleBotController.setGame("TicTacToe");
                 TicTacToe.startingTicTacToe();
             }
-            case AGAIN -> GameChoicer.starting();
+            case AGAIN -> ConsoleBotController.starting();
             default -> {
                 System.out.println("Wrong name \n");
-                whichOne(choice());
+                playChosenGame(givePlayerPossibleChoice());
             }
         }
     }
-
-    /**
-     * игровое подменю
-     */
-    public static void again() {
-        System.out.println("Wanna try again? \n 1) Yes \n 2) Main menu \n 3) Exit");
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-        switch (input) {
-            case ("2") -> GameChoicer.starting();
-            case ("3") -> System.exit(0);
-            case ("1") -> {
-                if (Objects.equals(game, "Hangman")) {
-                    Hangman.play();
-                } else if (Objects.equals(game, "TicTacToe")) {
-                    TicTacToe.startingTicTacToe();
-                } else System.out.println("No game selected");
-            }
-
-            default -> {
-                System.out.println("Wrong name \n");
-                again();
-            }
-        }
-    }
-
 }
