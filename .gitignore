@@ -12,3 +12,10 @@
 /.idea/uiDesigner.xml
 /.idea/vcs.xml
 /.idea/workspace.xml
+/target/classes/Games/Command.class
+/target/classes/Games/ConsoleBotController.class
+/target/classes/Games/Exit.class
+/target/classes/Games/GameChoicer$1.class
+/target/classes/Games/GameName.class
+/target/classes/Games/Help.class
+/target/classes/Games/Start.class
