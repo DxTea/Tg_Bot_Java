@@ -81,26 +81,26 @@ public class TicTacToe implements Game {
             if (checkIfWin(AISign)) {
                 System.out.println("Вы проиграли!");
                 printTable();
-                GameChoicer.again();
+                ConsoleBotController.askPlayerAgain();
                 break;
             }
             if (isTableFull()) {
                 System.out.println("Ничья!");
                 printTable();
-                GameChoicer.again();
+                ConsoleBotController.askPlayerAgain();
                 break;
             }
             userTurn();
             if (checkIfWin(userSign)) {
                 System.out.println("Вы выиграли!");
                 printTable();
-                GameChoicer.again();
+                ConsoleBotController.askPlayerAgain();
                 break;
             }
             if (isTableFull()) {
                 System.out.println("Ничья!");
                 printTable();
-                GameChoicer.again();
+                ConsoleBotController.askPlayerAgain();
                 break;
             }
         }

@@ -1,10 +1,10 @@
-import Games.GameChoicer;
+import Games.ConsoleBotController;
 
 /**
  * основной класс для запуска игры
  */
 public class Main {
     public static void main(String[] args) {
-        new GameChoicer().starting();
+        new ConsoleBotController().starting();
     }
 }

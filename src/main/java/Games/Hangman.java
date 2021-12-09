@@ -73,7 +73,7 @@ public class Hangman implements Game {
             String word = generateWord();
             currentGame = new Hangman(word);
             currentGame.playGame();
-            GameChoicer.again();
+            ConsoleBotController.askPlayerAgain();
         }
     }
 
