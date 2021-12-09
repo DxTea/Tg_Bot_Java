@@ -1,6 +1,5 @@
 package Games;
 
-import java.util.Map;
 import java.util.Objects;
 
 import static Games.ConsoleBotController.givePlayerPossibleChoice;
@@ -20,7 +19,7 @@ public class GameChoicer {
             }
             case TICTACTOE -> {
                 m_consoleBotController.setGame("TicTacToe");
-                TicTacToe.startingTicTacToe();
+                TicTacToe.play();
             }
             case AGAIN -> ConsoleBotController.starting();
             default -> {

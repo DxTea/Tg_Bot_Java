@@ -16,7 +16,7 @@ public class TicTacToe implements Game {
     /**
      * игровое поле
      */
-    private final char[][] table = new char[3][3];;
+    private final char[][] table = new char[3][3];
     /**
      * символ, которым играет пользователь
      */
@@ -49,20 +49,18 @@ public class TicTacToe implements Game {
 
     /**
      * позволяет нам самим составлять table
-     *
-     * @param sign символ, который хотим поставить
+     *  @param sign символ, который хотим поставить
      * @param x    столбец
      * @param y    строка
      */
-    public char[][] setTable(char sign, int x, int y) {
+    public void setTable(char sign, int x, int y) {
         table[y][x] = sign;
-        return table;
     }
 
     /**
      * запуск игры
      */
-    public static void startingTicTacToe(){
+    public static void play(){
         TicTacToe currentGame = new TicTacToe();
         currentGame.playGame();
     }

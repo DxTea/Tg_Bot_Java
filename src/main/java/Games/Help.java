@@ -3,10 +3,8 @@ package Games;
 import java.util.Scanner;
 
 public class Help implements Command {
-    private ConsoleBotController m_consoleBotController;
 
     public Help(ConsoleBotController consoleBotController) {
-        m_consoleBotController=consoleBotController;
     }
 
     @Override
