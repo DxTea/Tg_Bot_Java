@@ -12,18 +12,18 @@ public class GameChoicer {
     }
 
     public static void playChosenGame(String gameName) {
-        switch (Objects.requireNonNull(GameName.getNameByGameNumber(gameName))) {
+        switch (GameName.getNameByGameNumber(gameName)) {
             case HANGMAN -> {
-                m_consoleBotController.setGame("Hangman");
+                m_consoleBotController.setGame(GameName.HANGMAN.toString());
                 Hangman.play();
             }
             case TICTACTOE -> {
-                m_consoleBotController.setGame("TicTacToe");
+                m_consoleBotController.setGame(GameName.TICTACTOE.toString());
                 TicTacToe.play();
             }
             case AGAIN -> ConsoleBotController.starting();
             default -> {
-                System.out.println("Wrong name \n");
+                System.out.println(OutputMessages.WRONG_NAME.toString());
                 playChosenGame(givePlayerPossibleChoice());
             }
         }

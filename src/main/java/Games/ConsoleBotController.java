@@ -20,8 +20,8 @@ public class ConsoleBotController {
      * запуск бота
      */
     public static void starting() {
-        out.println("\nHello!");
-        out.println("Print 'help' to get info about bot. \nOr print 'start'.");
+        out.println(OutputMessages.HELLO_LINE.getOutput());
+        out.println(OutputMessages.HELLO_MENU.getOutput());
         Scanner input = new Scanner(in);
         String key = input.nextLine().toLowerCase(Locale.ROOT);
 
@@ -32,7 +32,7 @@ public class ConsoleBotController {
         Command commandToExecute = commands.get(command);
         if (commandToExecute != null) commandToExecute.execute(command, user);
         else {
-            out.println("Wrong command");
+            out.println(OutputMessages.WRONG_COMMAND_LINE.getOutput());
             ConsoleBotController.starting();
         }
 
@@ -44,7 +44,7 @@ public class ConsoleBotController {
      * @return строка с номером выбранной игры
      */
     public static String givePlayerPossibleChoice() {
-        out.println("Choose your game: \nprint number \n 1) Hangman  \n 2) TicTacToe  \n 3) back");
+        out.println(OutputMessages.CHOOSE_GAME_MENU.getOutput());
         Scanner input = new Scanner(in);
         return input.nextLine();
     }
@@ -61,22 +61,25 @@ public class ConsoleBotController {
      * игровое подменю
      */
     public static void askPlayerAgain() {
-        out.println("Wanna try again? \n 1) Yes \n 2) Main menu \n 3) Exit");
+        out.println(OutputMessages.WANT_TRY_AGAIN_MENU.getOutput());
         Scanner scanner = new Scanner(in);
         String input = scanner.nextLine();
-        switch (input) {
-            case ("2") -> ConsoleBotController.starting();
-            case ("3") -> exit(0);
-            case ("1") -> {
-                switch (game) {
-                    case "Hangman" -> Hangman.play();
-                    case "TicTacToe" -> TicTacToe.play();
-                    default -> out.println("No game selected");
+        PlayerAskAgainMenu playerAskAgainMenu=PlayerAskAgainMenu.getNameByGameNumber(input);
+
+        switch (playerAskAgainMenu) {
+            case EXIT -> exit(0);
+            case TO_MAIN_MENU -> ConsoleBotController.starting();
+            case PLAY_AGAIN -> {
+                GameName gameName= GameName.valueOf(game);
+                switch (gameName) {
+                    case HANGMAN -> Hangman.play();
+                    case TICTACTOE -> TicTacToe.play();
+                    default -> out.println(OutputMessages.NO_GAME_SELECTED.getOutput());
                 }
             }
 
             default -> {
-                out.println("Wrong name \n");
+                out.println(OutputMessages.WRONG_NAME.toString());
                 askPlayerAgain();
             }
         }
