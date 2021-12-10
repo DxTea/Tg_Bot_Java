@@ -5,22 +5,21 @@ public enum GameName {
     TICTACTOE("2"),
     AGAIN("3");
 
-    private String gameNumber;
+    private final String gameNumber;
+
     GameName(String s) {
-        gameNumber =s;
+        gameNumber = s;
     }
 
-    public static GameName getNameByGameNumber(String name){
-        if (HANGMAN.getGameNumber().equals(name)) // надо сделать switch наверное или я что-то не понимаю
+    public static GameName getNameByGameNumber(String name) {
+        if (HANGMAN.getGameNumber().equals(name))
             return HANGMAN;
-    else if (TICTACTOE.getGameNumber().equals(name))
+        if (TICTACTOE.getGameNumber().equals(name))
             return TICTACTOE;
-    else if (AGAIN.getGameNumber().equals(name))
-            return AGAIN;
-        return null;
+        return AGAIN;
     }
 
-    public String getGameNumber(){
+    public String getGameNumber() {
         return gameNumber;
     }
 }

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static Games.OutputMessages.*;
+import static java.lang.System.*;
+
 /**
  * Виселица
  */
@@ -52,7 +55,9 @@ public class Hangman implements Game {
      */
     private static final String[] words = {
             "пальто", "одиночество", "лопата",
-            "коромысло", "леопард"
+            "коромысло", "леопард", "зебра",
+            "виселица", "влюблённость", "ноутбук",
+            "рефакторинг", "человечество", "магазин"
     };
 
     /**
@@ -69,8 +74,8 @@ public class Hangman implements Game {
      */
     public static void play() {
         Hangman currentGame;
+        String word = generateWord();
         while (!exitFlag) {
-            String word = generateWord();
             currentGame = new Hangman(word);
             currentGame.playGame();
             ConsoleBotController.askPlayerAgain();
@@ -83,38 +88,40 @@ public class Hangman implements Game {
     @Override
     public void playGame() {
         printProgress();
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
+        Scanner scanner = new Scanner(in);
+        for (; ; ) {
             String input = scanner.nextLine().toLowerCase();
-            if (input.length() != 1 || !Character.isLetter(input.charAt(0))) {
-                System.out.print("Введите букву: ");
-            } else {
+            if (input.length() == 1 && Character.isLetter(input.charAt(0))) {
                 char userVariant = input.charAt(0);
-                if (mistakes.contains(userVariant) || progress.contains(userVariant)) {
-                    System.out.println("Эта буква уже была");
-                    System.out.print("Введите букву: ");
-                } else {
+                if (!mistakes.contains(userVariant) && !progress.contains(userVariant)) {
                     if (checkGuess(userVariant)) {
-                        System.out.print("Правильно! ");
+                        out.print(RIGHT.getOutput() + "\n");
                         if (!progress.contains(hiddenWordMask)) {
-                            System.out.println("Вы выйграли!");
+                            out.println(WIN.getOutput());
                             exitFlag = true;
                             break;
                         }
                     } else {
-                        System.out.print("Неправильно! ");
+                        out.print(WRONG.getOutput() + "\n");
                         mistakes.add(userVariant);
                         if (--lives == 0) {
-                            System.out.println("\nВы проиграли...");
+                            out.println("\n" + LOOSE.getOutput());
                             exitFlag = true;
                             break;
                         }
                     }
                     printProgress();
+                } else {
+                    out.println(SAME.getOutput());
+                    out.print(INPUT.getOutput());
                 }
+            } else {
+                out.print(INPUT.getOutput());
             }
         }
-        System.out.println("Это было слово: " + hiddenWord.toUpperCase());
+        out.println(ANSWER.getOutput() + hiddenWord.toUpperCase() + "\n");
+        exitFlag = false;
+
     }
 
     /**
@@ -136,14 +143,14 @@ public class Hangman implements Game {
      * метод показывает прогресс слова, оставшиеся жизни и запрашивает ввод новой буквы
      */
     private void printProgress() {
-        System.out.print("Слово:");
+        out.print(WORD.getOutput());
         for (char letter : progress) {
-            System.out.print(" " + letter);
+            out.print(" " + letter);
         }
-        System.out.print("\nЖизни: ");
+        out.print("\n" + LIFE.getOutput());
         for (int i = 0; i < lives; i++) {
-            System.out.print("💙");
+            out.print("💙");
         }
-        System.out.print("\n\n\nВведите букву: ");
+        out.print("\n\n\n" + INPUT.getOutput());
     }
 }

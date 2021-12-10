@@ -2,40 +2,38 @@ package Games;
 
 import java.util.*;
 
+import static java.lang.System.*;
+
 /**
  * класс для выбора игры, основное меню бота
  */
 public class ConsoleBotController {
     public static String game = "no game";
     public static Map<String, Command> commands;
-    private static GameChoicer gameChoicer;
 
     public ConsoleBotController() {
         fillCommands();
-        gameChoicer=new GameChoicer(this);
+        GameChoicer gameChoicer = new GameChoicer(this);
     }
 
     /**
      * запуск бота
      */
     public static void starting() {
-        System.out.println("\nHello!");
-        System.out.println("Print 'help' to get info about bot. \nOr print 'start'.");
-        Scanner input = new Scanner(System.in);
+        out.println(OutputMessages.HELLO_LINE.getOutput());
+        out.println(OutputMessages.HELLO_MENU.getOutput());
+        Scanner input = new Scanner(in);
         String key = input.nextLine().toLowerCase(Locale.ROOT);
 
-        Scanner user = input;
-        runCommand(key, user);
+        runCommand(key, input);
     }
 
     private static void runCommand(String command, Scanner user) {
         Command commandToExecute = commands.get(command);
-        if (commandToExecute == null) {
-            System.out.println("Wrong command");
-            ConsoleBotController.starting();
-        }
+        if (commandToExecute != null) commandToExecute.execute(command, user);
         else {
-            commandToExecute.execute(command, user);
+            out.println(OutputMessages.WRONG_COMMAND_LINE.getOutput());
+            ConsoleBotController.starting();
         }
 
     }
@@ -46,8 +44,8 @@ public class ConsoleBotController {
      * @return строка с номером выбранной игры
      */
     public static String givePlayerPossibleChoice() {
-        System.out.println("Choose your game: \nprint number \n 1) Hangman  \n 2) TicTacToe  \n 3) back");
-        Scanner input = new Scanner(System.in);
+        out.println(OutputMessages.CHOOSE_GAME_MENU.getOutput());
+        Scanner input = new Scanner(in);
         return input.nextLine();
     }
 
@@ -63,35 +61,38 @@ public class ConsoleBotController {
      * игровое подменю
      */
     public static void askPlayerAgain() {
-        System.out.println("Wanna try again? \n 1) Yes \n 2) Main menu \n 3) Exit");
-        Scanner scanner = new Scanner(System.in);
+        out.println(OutputMessages.WANT_TRY_AGAIN_MENU.getOutput());
+        Scanner scanner = new Scanner(in);
         String input = scanner.nextLine();
-        switch (input) {
-            case ("2") -> ConsoleBotController.starting();
-            case ("3") -> System.exit(0);
-            case ("1") -> {
-                if (Objects.equals(game, "Hangman")) {
-                    Hangman.play();
-                } else if (Objects.equals(game, "TicTacToe")) {
-                    TicTacToe.startingTicTacToe();
-                } else System.out.println("No game selected");
+        PlayerAskAgainMenu playerAskAgainMenu=PlayerAskAgainMenu.getNameByGameNumber(input);
+
+        switch (playerAskAgainMenu) {
+            case EXIT -> exit(0);
+            case TO_MAIN_MENU -> ConsoleBotController.starting();
+            case PLAY_AGAIN -> {
+                GameName gameName= GameName.valueOf(game);
+                switch (gameName) {
+                    case HANGMAN -> Hangman.play();
+                    case TICTACTOE -> TicTacToe.play();
+                    default -> out.println(OutputMessages.NO_GAME_SELECTED.getOutput());
+                }
             }
 
             default -> {
-                System.out.println("Wrong name \n");
+                out.println(OutputMessages.WRONG_NAME.toString());
                 askPlayerAgain();
             }
         }
     }
 
     private void fillCommands() {
-        commands=new HashMap<>();
+        commands = new HashMap<>();
         commands.put("/start", new Start(this));
         commands.put("/help", new Help(this));
         commands.put("/exit", new Exit(this));
     }
 
     public void setGame(String gameName) {
-        game=gameName;
+        game = gameName;
     }
 }

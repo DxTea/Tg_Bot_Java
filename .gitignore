@@ -19,3 +19,6 @@
 /target/classes/Games/GameName.class
 /target/classes/Games/Help.class
 /target/classes/Games/Start.class
+/target/classes/Games/ConsoleBotController$1.class
+/target/classes/Games/OutputMessages.class
+/target/classes/Games/PlayerAskAgainMenu.class

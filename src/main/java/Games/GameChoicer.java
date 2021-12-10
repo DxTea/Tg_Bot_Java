@@ -1,6 +1,5 @@
 package Games;
 
-import java.util.Map;
 import java.util.Objects;
 
 import static Games.ConsoleBotController.givePlayerPossibleChoice;
@@ -8,23 +7,23 @@ import static Games.ConsoleBotController.givePlayerPossibleChoice;
 public class GameChoicer {
     private static ConsoleBotController m_consoleBotController;
 
-    public GameChoicer(ConsoleBotController consoleBotController){
-        m_consoleBotController=consoleBotController;
+    public GameChoicer(ConsoleBotController consoleBotController) {
+        m_consoleBotController = consoleBotController;
     }
 
     public static void playChosenGame(String gameName) {
-        switch (Objects.requireNonNull(GameName.getNameByGameNumber(gameName))) {
+        switch (GameName.getNameByGameNumber(gameName)) {
             case HANGMAN -> {
-                m_consoleBotController.setGame("Hangman");
+                m_consoleBotController.setGame(GameName.HANGMAN.toString());
                 Hangman.play();
             }
             case TICTACTOE -> {
-                m_consoleBotController.setGame("TicTacToe");
-                TicTacToe.startingTicTacToe();
+                m_consoleBotController.setGame(GameName.TICTACTOE.toString());
+                TicTacToe.play();
             }
             case AGAIN -> ConsoleBotController.starting();
             default -> {
-                System.out.println("Wrong name \n");
+                System.out.println(OutputMessages.WRONG_NAME.toString());
                 playChosenGame(givePlayerPossibleChoice());
             }
         }

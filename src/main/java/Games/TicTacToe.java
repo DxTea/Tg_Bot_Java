@@ -13,10 +13,12 @@ public class TicTacToe implements Game {
      * обозначение пустого места на поле
      */
     final char emptyCage = '.';
+    final char x = 'x';
+    final char zero = 'o';
     /**
      * игровое поле
      */
-    private final char[][] table = new char[3][3];;
+    private final char[][] table = new char[3][3];
     /**
      * символ, которым играет пользователь
      */
@@ -30,20 +32,20 @@ public class TicTacToe implements Game {
      * игрок выбирает играть крестиками или ноликами
      */
     private void whichSign() {
-        System.out.println("Если хотите играть крестиками - введите x, иначе o (по английски)");
+        System.out.println(OutputMessages.USER_TICTACTOE_CHOOSE_CHAR_LINE.getOutput());
         while (true) {
             char symbol = scanner.next().charAt(0);
-            if (symbol == 'x') {
-                userSign = 'x';
-                AISign = 'o';
+            if (symbol == x) {
+                userSign = x;
+                AISign = zero;
                 break;
             }
-            if (symbol == 'o') {
-                userSign = 'o';
-                AISign = 'x';
+            if (symbol == zero) {
+                userSign = zero;
+                AISign = x;
                 break;
             }
-            System.out.println("Введите повторно");
+            System.out.println(OutputMessages.USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
         }
     }
 
@@ -54,15 +56,14 @@ public class TicTacToe implements Game {
      * @param x    столбец
      * @param y    строка
      */
-    public char[][] setTable(char sign, int x, int y) {
+    public void setTable(char sign, int x, int y) {
         table[y][x] = sign;
-        return table;
     }
 
     /**
      * запуск игры
      */
-    public static void startingTicTacToe(){
+    public static void play() {
         TicTacToe currentGame = new TicTacToe();
         currentGame.playGame();
     }
@@ -74,31 +75,31 @@ public class TicTacToe implements Game {
     public void playGame() {
         initializeTable();
         whichSign();
-        if (userSign == 'x') userTurn();
+        if (userSign == x) userTurn();
         while (true) {
             AITurn();
             printTable();
             if (checkIfWin(AISign)) {
-                System.out.println("Вы проиграли!");
+                System.out.println(OutputMessages.LOOSE.getOutput());
                 printTable();
                 ConsoleBotController.askPlayerAgain();
                 break;
             }
             if (isTableFull()) {
-                System.out.println("Ничья!");
+                System.out.println(OutputMessages.DRAW.getOutput());
                 printTable();
                 ConsoleBotController.askPlayerAgain();
                 break;
             }
             userTurn();
             if (checkIfWin(userSign)) {
-                System.out.println("Вы выиграли!");
+                System.out.println(OutputMessages.WIN.getOutput());
                 printTable();
                 ConsoleBotController.askPlayerAgain();
                 break;
             }
             if (isTableFull()) {
-                System.out.println("Ничья!");
+                System.out.println(OutputMessages.DRAW.getOutput());
                 printTable();
                 ConsoleBotController.askPlayerAgain();
                 break;
@@ -131,11 +132,11 @@ public class TicTacToe implements Game {
      */
     public void userTurn() {
         int x, y;
-        System.out.println("Введите номер столбца и строки (от 1 до 3) через пробел или с новой строки");
+        System.out.println(OutputMessages.USER_TICTACTOE_HELP_LINE.getOutput());
         x = scanner.nextInt() - 1;
         y = scanner.nextInt() - 1;
         while (isCellNotValid(x, y)) {
-            System.out.println("Что-то не так. Введите повторно");
+            System.out.println(OutputMessages.USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
             x = scanner.nextInt() - 1;
             y = scanner.nextInt() - 1;
         }
@@ -160,17 +161,17 @@ public class TicTacToe implements Game {
      */
     public void AITurn() {
         int x, y;
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++)
-            if (table[i][j] == userSign) {
-                for (int n = -1; n <=1; n++)
-                    for (int m = -1; m <=1; m++) {
-                        if (!isCellNotValid(j + m, i + n)) {
-                            table[i+n][j+m] = AISign;
-                            return;
+                if (table[i][j] == userSign) {
+                    for (int n = -1; n <= 1; n++)
+                        for (int m = -1; m <= 1; m++) {
+                            if (!isCellNotValid(j + m, i + n)) {
+                                table[i + n][j + m] = AISign;
+                                return;
+                            }
                         }
-                    }
-            }
+                }
         }
         do {
             x = random.nextInt(3);
