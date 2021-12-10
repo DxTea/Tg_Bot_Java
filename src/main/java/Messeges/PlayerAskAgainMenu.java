@@ -1,5 +1,8 @@
-package Games;
+package Messeges;
 
+/**
+ * список команд по завершению игры
+ */
 public enum PlayerAskAgainMenu {
     EXIT("3"),
     TO_MAIN_MENU("2"),
@@ -12,7 +15,7 @@ public enum PlayerAskAgainMenu {
     }
 
     public static PlayerAskAgainMenu getNameByGameNumber(String name) {
-        if (PLAY_AGAIN.getCode().equals(name)) // надо сделать switch наверное или я что-то не понимаю
+        if (PLAY_AGAIN.getCode().equals(name))
             return PLAY_AGAIN;
         if (TO_MAIN_MENU.getCode().equals(name))
             return TO_MAIN_MENU;

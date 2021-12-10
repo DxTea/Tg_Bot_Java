@@ -22,3 +22,14 @@
 /target/classes/Games/ConsoleBotController$1.class
 /target/classes/Games/OutputMessages.class
 /target/classes/Games/PlayerAskAgainMenu.class
+/target/classes/Command/Command.class
+/target/classes/Menu/ConsoleBotController$1.class
+/target/classes/Menu/ConsoleBotController.class
+/target/classes/Command/Exit.class
+/target/classes/Menu/GameChoicer$1.class
+/target/classes/Menu/GameChoicer.class
+/target/classes/Messeges/GameName.class
+/target/classes/Command/Help.class
+/target/classes/Messeges/OutputMessages.class
+/target/classes/Messeges/PlayerAskAgainMenu.class
+/target/classes/Command/Start.class

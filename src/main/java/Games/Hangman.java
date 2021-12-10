@@ -1,10 +1,12 @@
 package Games;
 
+import Menu.ConsoleBotController;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static Games.OutputMessages.*;
+import static Messeges.OutputMessages.*;
 import static java.lang.System.*;
 
 /**

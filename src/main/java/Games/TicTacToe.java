@@ -1,5 +1,8 @@
 package Games;
 
+import Menu.ConsoleBotController;
+import Messeges.OutputMessages;
+
 import java.util.Random;
 import java.util.Scanner;
 
@@ -13,7 +16,13 @@ public class TicTacToe implements Game {
      * обозначение пустого места на поле
      */
     final char emptyCage = '.';
+    /**
+     * крестик
+     */
     final char x = 'x';
+    /**
+     * нолик
+     */
     final char zero = 'o';
     /**
      * игровое поле
@@ -31,7 +40,7 @@ public class TicTacToe implements Game {
     /**
      * игрок выбирает играть крестиками или ноликами
      */
-    private void whichSign() {
+    private void chooseSign() {
         System.out.println(OutputMessages.USER_TICTACTOE_CHOOSE_CHAR_LINE.getOutput());
         while (true) {
             char symbol = scanner.next().charAt(0);
@@ -74,7 +83,7 @@ public class TicTacToe implements Game {
     @Override
     public void playGame() {
         initializeTable();
-        whichSign();
+        chooseSign();
         if (userSign == x) userTurn();
         while (true) {
             AITurn();

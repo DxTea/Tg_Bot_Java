@@ -1,4 +1,8 @@
-package Games;
+package Menu;
+
+import Games.*;
+import Command.*;
+import Messeges.*;
 
 import java.util.*;
 
@@ -19,7 +23,7 @@ public class ConsoleBotController {
     /**
      * запуск бота
      */
-    public static void starting() {
+    public static void start() {
         out.println(OutputMessages.HELLO_LINE.getOutput());
         out.println(OutputMessages.HELLO_MENU.getOutput());
         Scanner input = new Scanner(in);
@@ -28,12 +32,17 @@ public class ConsoleBotController {
         runCommand(key, input);
     }
 
+    /**
+     * запуск команд
+     * @param command команда
+     * @param user ввод пользователя
+     */
     private static void runCommand(String command, Scanner user) {
         Command commandToExecute = commands.get(command);
         if (commandToExecute != null) commandToExecute.execute(command, user);
         else {
             out.println(OutputMessages.WRONG_COMMAND_LINE.getOutput());
-            ConsoleBotController.starting();
+            ConsoleBotController.start();
         }
 
     }
@@ -64,11 +73,11 @@ public class ConsoleBotController {
         out.println(OutputMessages.WANT_TRY_AGAIN_MENU.getOutput());
         Scanner scanner = new Scanner(in);
         String input = scanner.nextLine();
-        PlayerAskAgainMenu playerAskAgainMenu=PlayerAskAgainMenu.getNameByGameNumber(input);
+        PlayerAskAgainMenu playerAskAgainMenu= PlayerAskAgainMenu.getNameByGameNumber(input);
 
         switch (playerAskAgainMenu) {
             case EXIT -> exit(0);
-            case TO_MAIN_MENU -> ConsoleBotController.starting();
+            case TO_MAIN_MENU -> ConsoleBotController.start();
             case PLAY_AGAIN -> {
                 GameName gameName= GameName.valueOf(game);
                 switch (gameName) {
@@ -79,12 +88,15 @@ public class ConsoleBotController {
             }
 
             default -> {
-                out.println(OutputMessages.WRONG_NAME.toString());
+                out.println(OutputMessages.WRONG_NAME);
                 askPlayerAgain();
             }
         }
     }
 
+    /**
+     * инициализация команд
+     */
     private void fillCommands() {
         commands = new HashMap<>();
         commands.put("/start", new Start(this));
@@ -92,6 +104,10 @@ public class ConsoleBotController {
         commands.put("/exit", new Exit(this));
     }
 
+    /**
+     * определения игры
+     * @param gameName имя игры, которую выбрает пользователь
+     */
     public void setGame(String gameName) {
         game = gameName;
     }

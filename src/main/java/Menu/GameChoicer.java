@@ -1,9 +1,13 @@
-package Games;
+package Menu;
 
-import java.util.Objects;
+import Messeges.*;
+import Games.*;
 
-import static Games.ConsoleBotController.givePlayerPossibleChoice;
+import static Menu.ConsoleBotController.givePlayerPossibleChoice;
 
+/**
+ * основной класс выбора и запуска игры
+ */
 public class GameChoicer {
     private static ConsoleBotController m_consoleBotController;
 
@@ -11,6 +15,10 @@ public class GameChoicer {
         m_consoleBotController = consoleBotController;
     }
 
+    /**
+     * запуск выбранной игры
+     * @param gameName название игры
+     */
     public static void playChosenGame(String gameName) {
         switch (GameName.getNameByGameNumber(gameName)) {
             case HANGMAN -> {
@@ -21,9 +29,9 @@ public class GameChoicer {
                 m_consoleBotController.setGame(GameName.TICTACTOE.toString());
                 TicTacToe.play();
             }
-            case AGAIN -> ConsoleBotController.starting();
+            case AGAIN -> ConsoleBotController.start();
             default -> {
-                System.out.println(OutputMessages.WRONG_NAME.toString());
+                System.out.println(OutputMessages.WRONG_NAME);
                 playChosenGame(givePlayerPossibleChoice());
             }
         }

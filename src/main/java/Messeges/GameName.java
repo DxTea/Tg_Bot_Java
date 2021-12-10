@@ -1,5 +1,8 @@
-package Games;
+package Messeges;
 
+/**
+ * список игр
+ */
 public enum GameName {
     HANGMAN("1"),
     TICTACTOE("2"),

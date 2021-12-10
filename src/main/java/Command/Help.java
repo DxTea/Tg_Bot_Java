@@ -1,7 +1,13 @@
-package Games;
+package Command;
+
+import Menu.ConsoleBotController;
+import Messeges.OutputMessages;
 
 import java.util.Scanner;
 
+/**
+ * справочная информация
+ */
 public class Help implements Command {
 
     public Help(ConsoleBotController consoleBotController) {
@@ -12,6 +18,6 @@ public class Help implements Command {
         System.out.println(OutputMessages.DESCRIPTION_LINE.getOutput());
         System.out.println(OutputMessages.HELP_LINE.getOutput());
         user.nextLine();
-        ConsoleBotController.starting();
+        ConsoleBotController.start();
     }
 }
