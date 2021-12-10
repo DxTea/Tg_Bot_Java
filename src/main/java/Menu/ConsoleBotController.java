@@ -9,7 +9,7 @@ import java.util.*;
 import static java.lang.System.*;
 
 /**
- * класс для выбора игры, основное меню бота
+ * класс для выбора игры, основное меню для бота
  */
 public class ConsoleBotController {
     public static String game = "no game";
