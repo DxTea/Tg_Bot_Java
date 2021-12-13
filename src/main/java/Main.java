@@ -1,7 +1,7 @@
 import Menu.ConsoleBotController;
 
 /**
- * основной класс для запуска игры
+ * основной класс
  */
 public class Main {
     public static void main(String[] args) {
