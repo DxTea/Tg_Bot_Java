@@ -1,11 +1,12 @@
 package Games;
 
-import Menu.ConsoleBotController;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static Menu.ConsoleBotController.*;
+import static Menu.ConsoleBotController.chooseDifficult;
 import static Messeges.OutputMessages.*;
 import static java.lang.System.*;
 
@@ -55,11 +56,17 @@ public class Hangman implements Game {
     /**
      * набор слов для игры
      */
-    private static final String[] words = {
-            "пальто", "одиночество", "лопата",
-            "коромысло", "леопард", "зебра",
-            "виселица", "влюблённость", "ноутбук",
-            "рефакторинг", "человечество", "магазин"
+    private static final String[] wordsEasy = {
+            "пальто", "лопата",
+            "зебра", "магазин"
+    };
+    private static final String[] wordsMedium = {
+            "коромысло", "леопард", "ноутбук", "конфета", "телефон"
+    };
+    private static final String[] wordsHard = {
+            "одиночество",
+            "коромысло", "влюблённость",
+            "рефакторинг", "человечество"
     };
 
     /**
@@ -67,20 +74,26 @@ public class Hangman implements Game {
      *
      * @return слово
      */
-    public static String generateWord() {
-        return words[(int) (Math.random() * words.length)];
+    public static String generateWord(String difficult) {
+        return switch (difficult) {
+            case ("1") -> wordsEasy[(int) (Math.random() * wordsEasy.length)];
+            case ("2") -> wordsMedium[(int) (Math.random() * wordsMedium.length)];
+            case ("3") -> wordsHard[(int) (Math.random() * wordsHard.length)];
+            default -> throw new IllegalStateException("Unexpected value: " + difficult);
+        };
     }
 
     /**
      * запуск игры
      */
-    public static void play() {
+    public static void start() {
+        String difficult = chooseDifficult();
         Hangman currentGame;
-        String word = generateWord();
+        String word = generateWord(difficult);
         while (!exitFlag) {
             currentGame = new Hangman(word);
-            currentGame.playGame();
-            ConsoleBotController.askPlayerAgain();
+            currentGame.play();
+            askPlayerAgain();
         }
     }
 
@@ -88,42 +101,67 @@ public class Hangman implements Game {
      * игровая логика
      */
     @Override
-    public void playGame() {
+    public void play() {
         printProgress();
         Scanner scanner = new Scanner(in);
         for (; ; ) {
             String input = scanner.nextLine().toLowerCase();
-            if (input.length() == 1 && Character.isLetter(input.charAt(0))) {
-                char userVariant = input.charAt(0);
-                if (!mistakes.contains(userVariant) && !progress.contains(userVariant)) {
-                    if (checkGuess(userVariant)) {
-                        out.print(RIGHT.getOutput() + "\n");
-                        if (!progress.contains(hiddenWordMask)) {
-                            out.println(WIN.getOutput());
-                            exitFlag = true;
-                            break;
-                        }
-                    } else {
-                        out.print(WRONG.getOutput() + "\n");
-                        mistakes.add(userVariant);
-                        if (--lives == 0) {
-                            out.println("\n" + LOOSE.getOutput());
-                            exitFlag = true;
-                            break;
-                        }
-                    }
-                    printProgress();
-                } else {
-                    out.println(SAME.getOutput());
-                    out.print(INPUT.getOutput());
-                }
-            } else {
-                out.print(INPUT.getOutput());
-            }
+            if (checkCorrectInput(input)) break;
         }
         out.println(ANSWER.getOutput() + hiddenWord.toUpperCase() + "\n");
         exitFlag = false;
 
+    }
+
+    private boolean checkCorrectInput(String input) {
+        if (input.length() == 1 && Character.isLetter(input.charAt(0))) {
+            char userVariant = input.charAt(0);
+            return checkInput(userVariant);
+        } else {
+            out.print(INPUT.getOutput());
+        }
+        return false;
+    }
+
+    private boolean checkInput(char userVariant) {
+        if (!mistakes.contains(userVariant) && !progress.contains(userVariant)) {
+            return checkGuessCase(userVariant);
+        } else {
+            out.println(SAME.getOutput());
+            out.print(INPUT.getOutput());
+        }
+        return false;
+    }
+
+    private boolean checkGuessCase(char userVariant) {
+        if (checkGuess(userVariant)) {
+            out.print(RIGHT.getOutput() + "\n");
+            if (winCase()) return true;
+        } else {
+            out.print(WRONG.getOutput() + "\n");
+            mistakes.add(userVariant);
+            if (looseCase()) return true;
+        }
+        printProgress();
+        return false;
+    }
+
+    private boolean looseCase() {
+        if (--lives == 0) {
+            out.println("\n" + LOOSE.getOutput());
+            exitFlag = true;
+            return true;
+        }
+        return false;
+    }
+
+    private boolean winCase() {
+        if (!progress.contains(hiddenWordMask)) {
+            out.println(WIN.getOutput());
+            exitFlag = true;
+            return true;
+        }
+        return false;
     }
 
     /**
