@@ -8,4 +8,6 @@ public interface Game {
      * основная логика игры
      */
     void playGame();
+
+    void play();
 }
