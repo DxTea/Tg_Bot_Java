@@ -1,17 +1,19 @@
 package Games;
 
-import Menu.ConsoleBotController;
-import Messeges.OutputMessages;
 
 import java.util.Random;
 import java.util.Scanner;
+
+import static Menu.ConsoleBotController.*;
+import static Messeges.OutputMessages.*;
+import static java.lang.System.*;
 
 /**
  * класс реализации игры "Крестики - Нолики"
  */
 public class TicTacToe implements Game {
     private final Random random = new Random();
-    private final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(in);
     /**
      * обозначение пустого места на поле
      */
@@ -41,7 +43,7 @@ public class TicTacToe implements Game {
      * игрок выбирает играть крестиками или ноликами
      */
     private void chooseSign() {
-        System.out.println(OutputMessages.USER_TICTACTOE_CHOOSE_CHAR_LINE.getOutput());
+        out.println(USER_TICTACTOE_CHOOSE_CHAR_LINE.getOutput());
         while (true) {
             char symbol = scanner.next().charAt(0);
             if (symbol == x) {
@@ -54,7 +56,7 @@ public class TicTacToe implements Game {
                 AISign = x;
                 break;
             }
-            System.out.println(OutputMessages.USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
+            out.println(USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
         }
     }
 
@@ -72,16 +74,16 @@ public class TicTacToe implements Game {
     /**
      * запуск игры
      */
-    public static void play() {
+    public static void start() {
         TicTacToe currentGame = new TicTacToe();
-        currentGame.playGame();
+        currentGame.play();
     }
 
     /**
      * реализация игровой логики
      */
     @Override
-    public void playGame() {
+    public void play() {
         initializeTable();
         chooseSign();
         if (userSign == x) userTurn();
@@ -89,28 +91,28 @@ public class TicTacToe implements Game {
             AITurn();
             printTable();
             if (checkIfWin(AISign)) {
-                System.out.println(OutputMessages.LOOSE.getOutput());
+                out.println(LOOSE.getOutput());
                 printTable();
-                ConsoleBotController.askPlayerAgain();
+                askPlayerAgain();
                 break;
             }
             if (isTableFull()) {
-                System.out.println(OutputMessages.DRAW.getOutput());
+                out.println(DRAW.getOutput());
                 printTable();
-                ConsoleBotController.askPlayerAgain();
+                askPlayerAgain();
                 break;
             }
             userTurn();
             if (checkIfWin(userSign)) {
-                System.out.println(OutputMessages.WIN.getOutput());
+                out.println(WIN.getOutput());
                 printTable();
-                ConsoleBotController.askPlayerAgain();
+                askPlayerAgain();
                 break;
             }
             if (isTableFull()) {
-                System.out.println(OutputMessages.DRAW.getOutput());
+                out.println(DRAW.getOutput());
                 printTable();
-                ConsoleBotController.askPlayerAgain();
+                askPlayerAgain();
                 break;
             }
         }
@@ -131,8 +133,8 @@ public class TicTacToe implements Game {
     private void printTable() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++)
-                System.out.print(" " + table[i][j]);
-            System.out.println();
+                out.print(" " + table[i][j]);
+            out.println();
         }
     }
 
@@ -141,11 +143,11 @@ public class TicTacToe implements Game {
      */
     public void userTurn() {
         int x, y;
-        System.out.println(OutputMessages.USER_TICTACTOE_HELP_LINE.getOutput());
+        out.println(USER_TICTACTOE_HELP_LINE.getOutput());
         x = scanner.nextInt() - 1;
         y = scanner.nextInt() - 1;
         while (isCellNotValid(x, y)) {
-            System.out.println(OutputMessages.USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
+            out.println(USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
             x = scanner.nextInt() - 1;
             y = scanner.nextInt() - 1;
         }

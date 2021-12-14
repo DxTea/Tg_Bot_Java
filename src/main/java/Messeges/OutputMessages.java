@@ -4,6 +4,7 @@ package Messeges;
  * сообщения бота
  */
 public enum OutputMessages {
+    CHOOSE_DIFFICULT("Выберете сложность игры: \n 1) easy \n 2) medium \n 3) hard"),
     RIGHT("Правильно!"),
     WRONG("Неправильно!"),
     WIN("Вы выйграли!"),

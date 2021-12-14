@@ -8,10 +8,10 @@ public enum PlayerAskAgainMenu {
     TO_MAIN_MENU("2"),
     PLAY_AGAIN("1");
 
-    private String code;
+    private final String code;
 
     PlayerAskAgainMenu(String s) {
-        code=s;
+        code = s;
     }
 
     public static PlayerAskAgainMenu getNameByGameNumber(String name) {
@@ -22,7 +22,7 @@ public enum PlayerAskAgainMenu {
         return EXIT;
     }
 
-    private String getCode(){
+    private String getCode() {
         return this.code;
     }
 }

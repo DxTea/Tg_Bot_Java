@@ -32,10 +32,18 @@ public class ConsoleBotController {
         runCommand(key, input);
     }
 
+    public static String chooseDifficult() {
+        out.println(OutputMessages.CHOOSE_DIFFICULT.getOutput());
+        Scanner scanner = new Scanner(in);
+
+        return scanner.nextLine();
+    }
+
     /**
      * запуск команд
+     *
      * @param command команда
-     * @param user ввод пользователя
+     * @param user    ввод пользователя
      */
     private static void runCommand(String command, Scanner user) {
         Command commandToExecute = commands.get(command);
@@ -73,16 +81,16 @@ public class ConsoleBotController {
         out.println(OutputMessages.WANT_TRY_AGAIN_MENU.getOutput());
         Scanner scanner = new Scanner(in);
         String input = scanner.nextLine();
-        PlayerAskAgainMenu playerAskAgainMenu= PlayerAskAgainMenu.getNameByGameNumber(input);
+        PlayerAskAgainMenu playerAskAgainMenu = PlayerAskAgainMenu.getNameByGameNumber(input);
 
         switch (playerAskAgainMenu) {
             case EXIT -> exit(0);
             case TO_MAIN_MENU -> ConsoleBotController.start();
             case PLAY_AGAIN -> {
-                GameName gameName= GameName.valueOf(game);
+                GameName gameName = GameName.valueOf(game);
                 switch (gameName) {
-                    case HANGMAN -> Hangman.play();
-                    case TICTACTOE -> TicTacToe.play();
+                    case HANGMAN -> Hangman.start();
+                    case TICTACTOE -> TicTacToe.start();
                     default -> out.println(OutputMessages.NO_GAME_SELECTED.getOutput());
                 }
             }
@@ -106,6 +114,7 @@ public class ConsoleBotController {
 
     /**
      * определения игры
+     *
      * @param gameName имя игры, которую выбрает пользователь
      */
     public void setGame(String gameName) {
