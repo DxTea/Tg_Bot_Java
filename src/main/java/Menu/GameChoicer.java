@@ -32,6 +32,10 @@ public class GameChoicer {
                 m_consoleBotController.setGame(TICTACTOE.toString());
                 TicTacToe.start();
             }
+            case BATTLESHIPWAR -> {
+                m_consoleBotController.setGame(BATTLESHIPWAR.toString());
+                BattleshipWar.start();
+            }
             case AGAIN -> ConsoleBotController.start();
             default -> {
                 out.println(OutputMessages.WRONG_NAME);
