@@ -27,9 +27,13 @@ public class TicTacToe implements Game {
      */
     final char zero = 'o';
     /**
+     * размер поля
+     */
+    private int n = 3;
+    /**
      * игровое поле
      */
-    private final char[][] table = new char[3][3];
+    private final char[][] table = new char[n][n];
     /**
      * символ, которым играет пользователь
      */
@@ -122,8 +126,8 @@ public class TicTacToe implements Game {
      * создание игрового поля
      */
     public void initializeTable() {
-        for (int i = 0; i < 3; i++)
-            for (int j = 0; j < 3; j++)
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
                 table[i][j] = emptyCage;
     }
 
