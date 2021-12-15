@@ -2,7 +2,7 @@ package Games;
 
 import java.util.Scanner;
 
-import static Menu.ConsoleBotController.askPlayerAgain;
+import static Menu.ConsoleBotController.*;
 import static Messeges.OutputMessages.*;
 import static java.lang.System.in;
 import static java.lang.System.out;
