@@ -1,6 +1,5 @@
 package Games;
 
-
 import java.util.Random;
 import java.util.Scanner;
 
@@ -29,11 +28,15 @@ public class TicTacToe implements Game {
     /**
      * размер поля
      */
-    private int n = 3;
+    private int size = 3;
+    /**
+     * количество символов для выигрыша
+     */
+    private int winNumber = 3;
     /**
      * игровое поле
      */
-    private final char[][] table = new char[n][n];
+    private char[][] table;
     /**
      * символ, которым играет пользователь
      */
@@ -126,17 +129,48 @@ public class TicTacToe implements Game {
      * создание игрового поля
      */
     public void initializeTable() {
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
+        out.println(SET_TABLE.getOutput());
+        String n = scanner.next();
+        while (!isInteger(n)) {
+            out.println(WRONG_SIZE.getOutput());
+            n = scanner.next();
+        }
+
+        out.println(WIN_SIZE.getOutput());
+        String amount = scanner.next();
+        while (!isInteger(amount)) {
+            out.println(WRONG_SIZE.getOutput());
+            amount = scanner.next();
+        }
+
+        size = Integer.parseInt(n);
+        table = new char[size][size];
+        while (!isInteger(amount) || Integer.parseInt(amount) > size) {
+            out.println(WRONG_SIZE.getOutput());
+            amount = scanner.next();
+        }
+        winNumber = Integer.parseInt(amount);
+
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
                 table[i][j] = emptyCage;
+    }
+
+    public static boolean isInteger(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     /**
      * показ текущего состояние стола
      */
     private void printTable() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++)
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++)
                 out.print(" " + table[i][j]);
             out.println();
         }
@@ -166,7 +200,7 @@ public class TicTacToe implements Game {
      * @return true если доступна, иначе false
      */
     private boolean isCellNotValid(int x, int y) {
-        if (x < 0 || y < 0 || x >= 3 || y >= 3)
+        if (x < 0 || y < 0 || x >= size || y >= size)
             return true;
         return table[y][x] != emptyCage;
     }
@@ -176,8 +210,8 @@ public class TicTacToe implements Game {
      */
     public void AITurn() {
         int x, y;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++)
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++)
                 if (table[i][j] == userSign) {
                     for (int n = -1; n <= 1; n++)
                         for (int m = -1; m <= 1; m++) {
@@ -189,8 +223,8 @@ public class TicTacToe implements Game {
                 }
         }
         do {
-            x = random.nextInt(3);
-            y = random.nextInt(3);
+            x = random.nextInt(size);
+            y = random.nextInt(size);
         }
         while (isCellNotValid(x, y));
         table[y][x] = AISign;
@@ -199,17 +233,49 @@ public class TicTacToe implements Game {
     /**
      * проверка на выигрыш одной из сторон
      *
-     * @param sign крестик или нолик
+     * @param symbol крестик или нолик
      * @return true, если сторона выиграла, иначе false
      */
-    public boolean checkIfWin(char sign) {
-        for (int i = 0; i < 3; i++) {
-            if ((table[i][0] == sign && table[i][1] == sign && table[i][2] == sign) ||
-                    (table[0][i] == sign && table[1][i] == sign && table[2][i] == sign))
-                return true;
+    public boolean checkIfWin(char symbol) {
+        for (int i = 0; i < size-winNumber+1; i++) {
+            for (int j = 0; j < size-winNumber+1; j++) {
+                if (checkDiagonal(symbol, i, j) || checkLanes(symbol, i, j)) return true;
+            }
         }
-        return ((table[0][0] == sign && table[1][1] == sign && table[2][2] == sign) ||
-                (table[2][0] == sign && table[1][1] == sign && table[0][2] == sign));
+        return false;
+    }
+
+    /**
+     * Проверяем диагонали
+     */
+    boolean checkDiagonal(char symbol, int offsetX, int offsetY) {
+        boolean toright, toleft;
+        toright = true;
+        toleft = true;
+        for (int i = 0; i < winNumber; i++) {
+            toright &= (table[i][i+offsetY] == symbol);
+            toleft &= (table[winNumber-i-1+offsetX][i+offsetY] == symbol);
+        }
+
+        return (toright || toleft);
+    }
+
+    /**
+     * Проверяем вертикаль и горизонталь
+     */
+    boolean checkLanes(char symbol, int offsetX, int offsetY) {
+        boolean cols, rows;
+        for (int col = offsetX; col < winNumber+offsetX; col++) {
+            cols = true;
+            rows = true;
+            for (int row = offsetY; row < winNumber+offsetY; row++) {
+                cols &= (table[col][row] == symbol);
+                rows &= (table[row][col] == symbol);
+            }
+
+            if (cols || rows) return true;
+        }
+        return false;
     }
 
     /**
@@ -219,8 +285,8 @@ public class TicTacToe implements Game {
      * @return true, если поле заполнено, иначе false
      */
     public boolean isTableFull() {
-        for (int i = 0; i < 3; i++)
-            for (int j = 0; j < 3; j++)
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
                 if (table[i][j] == emptyCage)
                     return false;
         return true;

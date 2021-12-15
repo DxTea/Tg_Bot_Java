@@ -100,3 +100,5 @@
 /.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_30.xml
 /.idea/libraries/Maven__org_telegram_telegrambots_5_5_0.xml
 /.idea/libraries/Maven__org_telegram_telegrambots_meta_5_5_0.xml
+/target/classes/Games/BattleshipWar.class
+/target/classes/Bot.class

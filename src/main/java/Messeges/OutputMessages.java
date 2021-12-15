@@ -7,7 +7,7 @@ public enum OutputMessages {
     CHOOSE_DIFFICULT("Выберете сложность игры: \n 1) easy \n 2) medium \n 3) hard"),
     RIGHT("Правильно!"),
     WRONG("Неправильно!"),
-    WIN("Вы выйграли!"),
+    WIN("Вы выиграли!"),
     LOOSE("Вы проиграли!"),
     DRAW("Ничья"),
     SAME("Эта буква уже была."),
@@ -24,9 +24,12 @@ public enum OutputMessages {
     HELLO_MENU("Введите '/help' чтобы получить информацию о боте. \nИли введите '/start'."),
     WRONG_COMMAND_LINE("Неправильная команда"),
     WRONG_NAME("Неправильное имя"),
-    USER_TICTACTOE_HELP_LINE("Введите номер столбца и строки (от 1 до 3) через пробел или с новой строки"),
+    USER_TICTACTOE_HELP_LINE("Введите номер столбца и строки через пробел или с новой строки"),
     USER_TICTACTOE_TRY_AGAIN_LINE("Что-то не так. Введите повторно"),
-    USER_TICTACTOE_CHOOSE_CHAR_LINE("Если хотите играть крестиками - введите x, иначе o (по английски)");
+    USER_TICTACTOE_CHOOSE_CHAR_LINE("Если хотите играть крестиками - введите x, иначе o (по английски)"),
+    SET_TABLE("Введите размер игрового поля (до 10)"),
+    WRONG_SIZE("Что-то не так! Введите повторно!"),
+    WIN_SIZE("Введите количество крестиков или ноликов, необходимых для победы");
 
     private final String output;
 
