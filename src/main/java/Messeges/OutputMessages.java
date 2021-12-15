@@ -1,7 +1,7 @@
 package Messeges;
 
 /**
- * сообщения бота
+ * сообщения бота для пользователя
  */
 public enum OutputMessages {
     CHOOSE_DIFFICULT("Выберете сложность игры: \n 1) easy \n 2) medium \n 3) hard"),

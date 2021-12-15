@@ -1,7 +1,7 @@
 package Messeges;
 
 /**
- * список игр
+ * список игр бота
  */
 public enum GameName {
     HANGMAN("1"),

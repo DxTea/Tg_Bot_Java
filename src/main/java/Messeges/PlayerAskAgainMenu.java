@@ -1,7 +1,7 @@
 package Messeges;
 
 /**
- * список команд по завершению игры
+ * список команд по завершению игр
  */
 public enum PlayerAskAgainMenu {
     EXIT("3"),
