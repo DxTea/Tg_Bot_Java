@@ -6,7 +6,8 @@ package Messeges;
 public enum GameName {
     HANGMAN("1"),
     TICTACTOE("2"),
-    AGAIN("3");
+    BATTLESHIPWAR ("3"),
+    AGAIN("4");
 
     private final String gameNumber;
 
@@ -19,6 +20,8 @@ public enum GameName {
             return HANGMAN;
         if (TICTACTOE.getGameNumber().equals(name))
             return TICTACTOE;
+        if (BATTLESHIPWAR.getGameNumber().equals(name))
+            return BATTLESHIPWAR;
         return AGAIN;
     }
 

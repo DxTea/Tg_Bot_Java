@@ -1,8 +1,9 @@
 package Games;
 
-
+import bot.Channel;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import static Menu.ConsoleBotController.*;
 import static Messeges.OutputMessages.*;
@@ -12,6 +13,7 @@ import static java.lang.System.*;
  * класс реализации игры "Крестики - Нолики"
  */
 public class TicTacToe implements Game {
+    public Channel channel;
     private final Random random = new Random();
     private final Scanner scanner = new Scanner(in);
     /**
@@ -29,11 +31,15 @@ public class TicTacToe implements Game {
     /**
      * размер поля
      */
-    private int n = 3;
+    private int size = 3;
+    /**
+     * количество символов для выигрыша
+     */
+    private int winNumber = 3;
     /**
      * игровое поле
      */
-    private final char[][] table = new char[n][n];
+    private final char[][] table = new char[size][size];
     /**
      * символ, которым играет пользователь
      */
@@ -47,9 +53,10 @@ public class TicTacToe implements Game {
      * игрок выбирает играть крестиками или ноликами
      */
     private void chooseSign() {
-        out.println(USER_TICTACTOE_CHOOSE_CHAR_LINE.getOutput());
+        //out.println(USER_TICTACTOE_CHOOSE_CHAR_LINE.getOutput());
+        printToUser(USER_TICTACTOE_CHOOSE_CHAR_LINE.getOutput());
         while (true) {
-            char symbol = scanner.next().charAt(0);
+            char symbol = channel.sendToGame().charAt(0); //scanner.next().charAt(0); //
             if (symbol == x) {
                 userSign = x;
                 AISign = zero;
@@ -60,7 +67,10 @@ public class TicTacToe implements Game {
                 AISign = x;
                 break;
             }
-            out.println(USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
+            //out.println(USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
+            printToUser(USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
+            channel.sendToUser(USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
+
         }
     }
 
@@ -95,26 +105,30 @@ public class TicTacToe implements Game {
             AITurn();
             printTable();
             if (checkIfWin(AISign)) {
-                out.println(LOOSE.getOutput());
+                //out.println(LOOSE.getOutput());
+                printToUser((LOOSE.getOutput()));
                 printTable();
                 askPlayerAgain();
                 break;
             }
             if (isTableFull()) {
-                out.println(DRAW.getOutput());
+                //out.println(DRAW.getOutput());
+                printToUser(DRAW.getOutput());
                 printTable();
                 askPlayerAgain();
                 break;
             }
             userTurn();
             if (checkIfWin(userSign)) {
-                out.println(WIN.getOutput());
+                //out.println(WIN.getOutput());
+                printToUser(WIN.getOutput());
                 printTable();
                 askPlayerAgain();
                 break;
             }
             if (isTableFull()) {
-                out.println(DRAW.getOutput());
+                //out.println(DRAW.getOutput());
+                printToUser(DRAW.getOutput());
                 printTable();
                 askPlayerAgain();
                 break;
@@ -126,19 +140,56 @@ public class TicTacToe implements Game {
      * создание игрового поля
      */
     public void initializeTable() {
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
+        printToUser(SET_TABLE.getOutput());
+
+        String n = getInput(); //scanner.next();
+        while (!isInteger(n)) {
+            //out.println(WRONG_SIZE.getOutput());
+            printToUser(WRONG_SIZE.getOutput());
+            //n = scanner.next();
+            n = getInput();
+        }
+
+        //out.println(WIN_SIZE.getOutput());
+        printToUser(WIN_SIZE.getOutput());
+        String amount = getInput(); //scanner.next();
+        while (!isInteger(amount)) {
+            //out.println(WRONG_SIZE.getOutput());
+            printToUser(WRONG_SIZE.getOutput());
+            //amount = scanner.next();
+            amount = getInput();
+        }
+
+        size = Integer.parseInt(n);
+        winNumber = Integer.parseInt(amount);
+
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
                 table[i][j] = emptyCage;
+    }
+
+
+    public static boolean isInteger(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     /**
      * показ текущего состояние стола
      */
     private void printTable() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++)
-                out.print(" " + table[i][j]);
-            out.println();
+        for (int i = 0; i < size; i++) {
+            String line = "";
+            for (int j = 0; j < size; j++){
+                line += " " + table[i][j];
+                //out.print(" " + table[i][j]);
+            }
+            //out.println();
+            printToUser(line);
         }
     }
 
@@ -147,13 +198,15 @@ public class TicTacToe implements Game {
      */
     public void userTurn() {
         int x, y;
-        out.println(USER_TICTACTOE_HELP_LINE.getOutput());
-        x = scanner.nextInt() - 1;
-        y = scanner.nextInt() - 1;
+        //out.println(USER_TICTACTOE_HELP_LINE.getOutput());
+        printToUser(USER_TICTACTOE_HELP_LINE.getOutput());
+        x = Integer.parseInt(getInput())-1;//scanner.nextInt() - 1;
+        y = Integer.parseInt(getInput())-1;//scanner.nextInt() - 1;
         while (isCellNotValid(x, y)) {
-            out.println(USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
-            x = scanner.nextInt() - 1;
-            y = scanner.nextInt() - 1;
+            //out.println(USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
+            printToUser(USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
+            x = Integer.parseInt(getInput())-1;//scanner.nextInt() - 1;
+            y = Integer.parseInt(getInput())-1;//scanner.nextInt() - 1;
         }
         table[y][x] = userSign;
     }
@@ -166,7 +219,7 @@ public class TicTacToe implements Game {
      * @return true если доступна, иначе false
      */
     private boolean isCellNotValid(int x, int y) {
-        if (x < 0 || y < 0 || x >= 3 || y >= 3)
+        if (x < 0 || y < 0 || x >= size || y >= size)
             return true;
         return table[y][x] != emptyCage;
     }
@@ -176,8 +229,8 @@ public class TicTacToe implements Game {
      */
     public void AITurn() {
         int x, y;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++)
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++)
                 if (table[i][j] == userSign) {
                     for (int n = -1; n <= 1; n++)
                         for (int m = -1; m <= 1; m++) {
@@ -189,8 +242,8 @@ public class TicTacToe implements Game {
                 }
         }
         do {
-            x = random.nextInt(3);
-            y = random.nextInt(3);
+            x = random.nextInt(size);
+            y = random.nextInt(size);
         }
         while (isCellNotValid(x, y));
         table[y][x] = AISign;
@@ -203,6 +256,19 @@ public class TicTacToe implements Game {
      * @return true, если сторона выиграла, иначе false
      */
     public boolean checkIfWin(char sign) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++)
+                if (table[i][j] == userSign) {
+                    for (int n = -1; n <= 1; n++)
+                        for (int m = -1; m <= 1; m++) {
+                            if (!isCellNotValid(j + m, i + n)) {
+                                table[i + n][j + m] = AISign;
+                                return true;
+                            }
+                        }
+                }
+        }
+
         for (int i = 0; i < 3; i++) {
             if ((table[i][0] == sign && table[i][1] == sign && table[i][2] == sign) ||
                     (table[0][i] == sign && table[1][i] == sign && table[2][i] == sign))
@@ -212,6 +278,53 @@ public class TicTacToe implements Game {
                 (table[2][0] == sign && table[1][1] == sign && table[0][2] == sign));
     }
 
+    boolean checkWin(char symbol) {
+        for (int i = 0; i < size-winNumber+1; i++) {
+            for (int j = 0; j < size-winNumber+1; j++) {
+                if (checkDiagonal(symbol, i, j) || checkLanes(symbol, i, j)) return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Проверяем диагонали
+     */
+    boolean checkDiagonal(char symb, int offsetX, int offsetY) {
+        boolean toright, toleft;
+        toright = true;
+        toleft = true;
+        for (int i=0; i<4; i++) {
+            toright &= (table[i][i] == symb);
+            toleft &= (table[4-i-1][i] == symb);
+        }
+
+        if (toright || toleft) return true;
+
+        return false;
+    }
+
+    int block = 4; // размер блока
+
+    /**
+     * Проверяем вертикаль и горизонталь
+     */
+    boolean checkLanes(char symb, int offsetX, int offsetY) {
+        boolean cols, rows;
+        for (int col=offsetX; col<block+offsetX; col++) {
+            cols = true;
+            rows = true;
+            for (int row=offsetY; row<block+offsetY; row++) {
+                cols &= (table[col][row] == symb);
+                rows &= (table[row][col] == symb);
+            }
+
+            if (cols || rows) return true;
+        }
+
+        return false;
+    }
+
     /**
      * проверка на заполненное поле
      * нужна в случае ничьи
@@ -219,10 +332,20 @@ public class TicTacToe implements Game {
      * @return true, если поле заполнено, иначе false
      */
     public boolean isTableFull() {
-        for (int i = 0; i < 3; i++)
-            for (int j = 0; j < 3; j++)
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
                 if (table[i][j] == emptyCage)
                     return false;
         return true;
+    }
+
+    private String getInput() {
+        //scanner.next();
+        return channel.sendToGame();
+    }
+
+    private void printToUser(String output) {
+        out.println(output);
+        channel.sendToUser(output);
     }
 }

@@ -1,6 +1,7 @@
 package Games;
 
 import java.util.Scanner;
+import static Menu.ConsoleBotController.*;
 
 public class BattleshipWar implements Game{
     static Scanner scanner = new Scanner(System.in);
@@ -70,7 +71,7 @@ public class BattleshipWar implements Game{
                         playerField[y + m][x] = '1';
                     }
                 }
-                // печатаем в консоли поле игрока, на котором будет видно, где игрок уже поставил корабли
+                // Печатаем в консоли поле игрока, на котором будет видно, где игрок уже поставил корабли
                 // о реализации метода - см. ниже
                 printField(playerField);
             }
