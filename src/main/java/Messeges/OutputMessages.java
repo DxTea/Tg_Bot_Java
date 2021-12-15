@@ -24,7 +24,7 @@ public enum OutputMessages {
     HELLO_MENU("Введите '/help' чтобы получить информацию о боте. \nИли введите '/start'."),
     WRONG_COMMAND_LINE("Неправильная команда"),
     WRONG_NAME("Неправильное имя"),
-    USER_TICTACTOE_HELP_LINE("Введите номер столбца и строки (от 1 до 3) через пробел или с новой строки"),
+    USER_TICTACTOE_HELP_LINE("Введите номер столбца и строки через пробел или с новой строки"),
     USER_TICTACTOE_TRY_AGAIN_LINE("Что-то не так. Введите повторно"),
     USER_TICTACTOE_CHOOSE_CHAR_LINE("Если хотите играть крестиками - введите x, иначе o (по английски)"),
     SET_TABLE("Введите размер игрового поля (до 10)"),
