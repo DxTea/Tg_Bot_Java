@@ -294,9 +294,9 @@ public class TicTacToe implements Game {
         boolean toright, toleft;
         toright = true;
         toleft = true;
-        for (int i=0; i<4; i++) {
-            toright &= (table[i][i] == symb);
-            toleft &= (table[4-i-1][i] == symb);
+        for (int i=0; i<winNumber; i++) {
+            toright &= (table[i+offsetX][i+offsetY] == symb);
+            toleft &= (table[winNumber-i-1+offsetX][i+offsetY] == symb);
         }
 
         if (toright || toleft) return true;
@@ -304,17 +304,15 @@ public class TicTacToe implements Game {
         return false;
     }
 
-    int block = 4; // размер блока
-
     /**
      * Проверяем вертикаль и горизонталь
      */
     boolean checkLanes(char symb, int offsetX, int offsetY) {
         boolean cols, rows;
-        for (int col=offsetX; col<block+offsetX; col++) {
+        for (int col=offsetX; col<winNumber+offsetX; col++) {
             cols = true;
             rows = true;
-            for (int row=offsetY; row<block+offsetY; row++) {
+            for (int row=offsetY; row<winNumber+offsetY; row++) {
                 cols &= (table[col][row] == symb);
                 rows &= (table[row][col] == symb);
             }
