@@ -75,7 +75,7 @@ public class BattleshipWar implements Game{
         int position = 0;
         for (int i = 4; i >= 1; i--) {
             for (int k = 1; k <= 5 - i; k++) {
-                out.println("Расставляем " + i + "-палубный корабль. Осталось расставить: " + (5-i-k));
+                out.println("Расставляем " + i + "-палубный корабль. Осталось расставить: " + (5-i-k+1));
 
                 int validationResult = 1;
                 while (validationResult != 0) {
@@ -92,13 +92,13 @@ public class BattleshipWar implements Game{
 
                 if (position == 1) {
                     for (int q = 0; q < i; q++) {
-                        playerField[y][x + q] = shipSymbol;
+                        playerField[y-1][x-1 + q] = shipSymbol;
                     }
                 }
 
                 if (position == 2) {
                     for (int m = 0; m < i; m++) {
-                        playerField[y + m][x] = shipSymbol;
+                        playerField[y-1 + m][x-1] = shipSymbol;
                     }
                 }
                 printField(playerField);
@@ -113,9 +113,9 @@ public class BattleshipWar implements Game{
         for (char[] cells : field) {
             for (char cell : cells) {
                 if (cell == 0) {
-                    out.print(emptyCage);
+                    out.print(emptyCage + "  ");
                 } else {
-                    out.print(cell);
+                    out.print(cell + "  ");
                 }
             }
             out.println();
@@ -188,6 +188,7 @@ public class BattleshipWar implements Game{
     private static int validateCoordForShip(char[][] field, int x, int y, int position, int shipType) {
         if (position == 1) {
             for (int i = 0; i < shipType - 1; i++) {
+                try {
                 if (shipSymbol == field[y][x + i]
                         || shipSymbol == field[y - 1][x + i]
                         || shipSymbol == field[y + 1][x + i]
@@ -195,10 +196,12 @@ public class BattleshipWar implements Game{
                         || shipSymbol == field[y][x + i - 1]
                         || (x + i) > 9) {
                     return -1;
-                }
+                } }
+                catch (ArrayIndexOutOfBoundsException e) { return -1; }
             }
         } else if (position == 2) {
             for (int i = 0; i < shipType - 1; i++) {
+                try {
                 if (shipSymbol == field[y][x + i]
                         || shipSymbol == field[y - 1][x + i]
                         || shipSymbol == field[y + 1][x + i]
@@ -206,7 +209,8 @@ public class BattleshipWar implements Game{
                         || shipSymbol == field[y][x + i - 1]
                         || (y + i) > 9) {
                     return -1;
-                }
+                } }
+                catch (ArrayIndexOutOfBoundsException e) { return -1; }
             }
         }
         return 0;

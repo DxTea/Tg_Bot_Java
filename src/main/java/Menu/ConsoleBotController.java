@@ -91,6 +91,7 @@ public class ConsoleBotController {
                 switch (gameName) {
                     case HANGMAN -> Hangman.start();
                     case TICTACTOE -> TicTacToe.start();
+                    case BATTLESHIPWAR -> BattleshipWar.start();
                     default -> out.println(OutputMessages.NO_GAME_SELECTED.getOutput());
                 }
             }
