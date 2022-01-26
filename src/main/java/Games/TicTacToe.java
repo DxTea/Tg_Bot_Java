@@ -3,9 +3,8 @@ package Games;
 import bot.Channel;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
-import static Menu.ConsoleBotController.*;
+import static Menu.BotController.*;
 import static Messeges.OutputMessages.*;
 import static java.lang.System.*;
 

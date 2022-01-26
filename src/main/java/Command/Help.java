@@ -1,6 +1,6 @@
 package Command;
 
-import Menu.ConsoleBotController;
+import Menu.BotController;
 import Messeges.OutputMessages;
 
 import java.util.Scanner;
@@ -10,7 +10,7 @@ import java.util.Scanner;
  */
 public class Help implements Command {
 
-    public Help(ConsoleBotController consoleBotController) {
+    public Help(BotController consoleBotController) {
     }
 
     @Override
@@ -18,6 +18,6 @@ public class Help implements Command {
         System.out.println(OutputMessages.DESCRIPTION_LINE.getOutput());
         System.out.println(OutputMessages.HELP_LINE.getOutput());
         user.nextLine();
-        ConsoleBotController.start();
+        BotController.start();
     }
 }

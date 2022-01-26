@@ -1,21 +1,21 @@
 package Command;
 
-import Menu.ConsoleBotController;
+import Menu.BotController;
 
 import java.util.Scanner;
 
-import static Menu.ConsoleBotController.givePlayerPossibleChoice;
+import static Menu.BotController.givePlayerPossibleChoice;
 
 /**
  * запуск бота
  */
 public class Start implements Command {
 
-    public Start(ConsoleBotController consoleBotController) {
+    public Start(BotController consoleBotController) {
     }
 
     @Override
     public void execute(String command, Scanner user) {
-        ConsoleBotController.playChosenGame(givePlayerPossibleChoice());
+        BotController.playChosenGame(givePlayerPossibleChoice());
     }
 }

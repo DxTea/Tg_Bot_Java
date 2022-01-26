@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static Menu.ConsoleBotController.*;
-import static Menu.ConsoleBotController.chooseDifficult;
+import static Menu.BotController.*;
+import static Menu.BotController.chooseDifficulty;
 import static Messeges.OutputMessages.*;
 import static java.lang.System.*;
 
@@ -87,7 +87,7 @@ public class Hangman implements Game {
      * запуск игры
      */
     public static void start() {
-        String difficult = chooseDifficult();
+        String difficult = chooseDifficulty();
         Hangman currentGame;
         String word = generateWord(difficult);
         while (!exitFlag) {

@@ -1,6 +1,6 @@
 package Command;
 
-import Menu.ConsoleBotController;
+import Menu.BotController;
 
 import java.util.Scanner;
 
@@ -8,7 +8,7 @@ import java.util.Scanner;
  * выход из бота
  */
 public class Exit implements Command {
-    public Exit(ConsoleBotController consoleBotController) {
+    public Exit(BotController consoleBotController) {
     }
 
     @Override

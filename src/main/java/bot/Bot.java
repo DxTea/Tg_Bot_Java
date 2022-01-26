@@ -1,36 +1,35 @@
 package bot;
 
-import Games.TicTacToe;
+import Menu.BotController;
+import Messeges.GameName;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.Collections;
 
 public class Bot extends TelegramLongPollingBot {
-    private boolean isGameStarted = false;
-    private Channel channel;
+    private boolean isGameChosen = false;
+    private Channel m_channel;
+    private GameName gameName;
+    private BotController m_botController;
 
     @Override
     public void onUpdateReceived(Update update) {
         // We check if the update has a message and the message has text
         if (update.hasMessage() && update.getMessage().hasText()) {
             String input = update.getMessage().getText();
+            char firstLetter=input.charAt(0);
             String chatId = update.getMessage().getChatId().toString();
             //SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
             //message.setChatId(update.getMessage().getChatId().toString());
             //message.setText(update.getMessage().getText());
-            if (input.equals("/start_t")) {
-                isGameStarted = true;
-                channel = new Channel(this, new TicTacToe(), input, chatId);
-                channel.startGame();
-            }
-
-            if (isGameStarted) {
-                channel.updateInput(input);
-            }
-//            try {
-//                execute(message); // Call method to send the message
-//            } catch (TelegramApiException e) {
-//                e.printStackTrace();
-//            }
+            m_botController.setChatId(chatId);
+            Thread thread=new Thread(m_botController);
+            thread.start();
         }
     }
 
@@ -42,5 +41,9 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         return "5042608301:AAHmlep4BboIBpE9yKwbFh-Ht0N4mwTuPnA";
+    }
+
+    public void setBotController(BotController botController) {
+        m_botController=botController;
     }
 }

@@ -1,28 +1,21 @@
 package bot;
 
-import Games.TicTacToe;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
+
 
 public class Channel {
-    public Channel(Bot bot, TicTacToe game, String input, String chatId) {
+    public Channel(Bot bot, String chatId) {
         m_bot = bot;
-        m_game = game;
-        m_game.channel = this;
-        m_input = input;
         m_chatId = chatId;
-
+        m_messagesToCheck=new ArrayDeque<>();
     }
-    private Bot m_bot;
-    private TicTacToe m_game;
-    private String m_input;
-    private String m_chatId;
-
-
-    public void startGame() {
-        m_game.play();
-    }
+    private final Bot m_bot;
+    private final String m_chatId;
+    private final Queue<String> m_messagesToCheck;
 
     public void sendToUser(String output) {
         try {
@@ -31,11 +24,8 @@ public class Channel {
             e.printStackTrace();
         }
     }
-    public void updateInput (String input) {
-        m_input = input;
-    }
 
-    public String sendToGame () {
-        return m_input;
+    public void queueMessagesToGame(String input) {
+        m_messagesToCheck.add(input);
     }
 }

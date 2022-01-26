@@ -3,6 +3,10 @@ package Menu;
 import Games.*;
 import Command.*;
 import Messeges.*;
+import bot.Bot;
+import bot.LaunchEnvironment;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.*;
 
@@ -11,13 +15,28 @@ import static java.lang.System.*;
 /**
  * класс для выбора игры, основное меню для бота
  */
-public class ConsoleBotController {
+public class BotController implements Runnable{
     public static String game = "no game";
     public static Map<String, Command> commands;
 
-    public ConsoleBotController() {
+    private LaunchEnvironment m_environment=LaunchEnvironment.CONSOLE;
+    private Bot m_bot;
+    private String m_chatId;
+
+    public BotController() {
         fillCommands();
         GameChoicer gameChoicer = new GameChoicer(this);
+    }
+
+    public BotController(LaunchEnvironment environment, Bot bot){
+        this();
+        m_environment=environment;
+        m_bot=bot;
+    }
+
+    @Override
+    public void run() {
+        start();
     }
 
     /**
@@ -32,7 +51,7 @@ public class ConsoleBotController {
         runCommand(key, input);
     }
 
-    public static String chooseDifficult() {
+    public static String chooseDifficulty() {
         out.println(OutputMessages.CHOOSE_DIFFICULT.getOutput());
         Scanner scanner = new Scanner(in);
 
@@ -50,7 +69,7 @@ public class ConsoleBotController {
         if (commandToExecute != null) commandToExecute.execute(command, user);
         else {
             out.println(OutputMessages.WRONG_COMMAND_LINE.getOutput());
-            ConsoleBotController.start();
+            BotController.start();
         }
 
     }
@@ -85,7 +104,7 @@ public class ConsoleBotController {
 
         switch (playerAskAgainMenu) {
             case EXIT -> exit(0);
-            case TO_MAIN_MENU -> ConsoleBotController.start();
+            case TO_MAIN_MENU -> BotController.start();
             case PLAY_AGAIN -> {
                 GameName gameName = GameName.valueOf(game);
                 switch (gameName) {
@@ -121,4 +140,26 @@ public class ConsoleBotController {
     public void setGame(String gameName) {
         game = gameName;
     }
+
+    private void printToUser(String text){
+        switch (m_environment){
+            case CONSOLE -> {
+                out.println(text);
+            }
+            case TELEGRAM -> {
+                try {
+                    m_bot.execute(SendMessage.builder().text(text).chatId(m_chatId).build());
+                } catch (TelegramApiException e) {
+
+                }
+            }
+        }
+    }
+
+    public void setChatId(String chatId) {
+        m_chatId=chatId;
+    }
+
+    //private void setBot
+
 }

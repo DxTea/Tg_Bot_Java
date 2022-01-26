@@ -3,7 +3,7 @@ package Menu;
 import Messeges.*;
 import Games.*;
 
-import static Menu.ConsoleBotController.givePlayerPossibleChoice;
+import static Menu.BotController.givePlayerPossibleChoice;
 import static Messeges.GameName.*;
 import static java.lang.System.*;
 
@@ -11,9 +11,9 @@ import static java.lang.System.*;
  * основной класс выбора и запуска игры
  */
 public class GameChoicer {
-    private static ConsoleBotController m_consoleBotController;
+    private static BotController m_consoleBotController;
 
-    public GameChoicer(ConsoleBotController consoleBotController) {
+    public GameChoicer(BotController consoleBotController) {
         m_consoleBotController = consoleBotController;
     }
 
@@ -36,7 +36,7 @@ public class GameChoicer {
                 m_consoleBotController.setGame(BATTLESHIPWAR.toString());
                 BattleshipWar.start();
             }
-            case AGAIN -> ConsoleBotController.start();
+            case AGAIN -> BotController.start();
             default -> {
                 out.println(OutputMessages.WRONG_NAME);
                 playChosenGame(givePlayerPossibleChoice());
