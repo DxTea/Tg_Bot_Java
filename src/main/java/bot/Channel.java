@@ -11,11 +11,9 @@ public class Channel {
     public Channel(Bot bot, String chatId) {
         m_bot = bot;
         m_chatId = chatId;
-        m_messagesToCheck=new ArrayDeque<>();
     }
     private final Bot m_bot;
     private final String m_chatId;
-    private final Queue<String> m_messagesToCheck;
 
     public void sendToUser(String output) {
         try {
@@ -26,6 +24,10 @@ public class Channel {
     }
 
     public void queueMessagesToGame(String input) {
-        m_messagesToCheck.add(input);
+ //       m_messagesToCheck.add(input);
+    }
+
+    public String sendToGame() {
+        return "";
     }
 }

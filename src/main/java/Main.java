@@ -37,10 +37,7 @@ public class Main {
             case TELEGRAM -> {
                 try {
                     TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-                    Bot bot = new Bot();
-                    botsApi.registerBot(bot);
-                    BotController botController = new BotController(LaunchEnvironment.TELEGRAM, bot);
-                    bot.setBotController(botController);
+                    botsApi.registerBot(new Bot());
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }

@@ -19,9 +19,11 @@ public class BotController implements Runnable{
     public static String game = "no game";
     public static Map<String, Command> commands;
 
-    private LaunchEnvironment m_environment=LaunchEnvironment.CONSOLE;
-    private Bot m_bot;
-    private String m_chatId;
+    private static LaunchEnvironment m_environment=LaunchEnvironment.CONSOLE;
+    private static Bot m_bot;
+    private static String m_chatId;
+    private Queue<String> m_messagesToCheck;
+
 
     public BotController() {
         fillCommands();
@@ -32,27 +34,44 @@ public class BotController implements Runnable{
         this();
         m_environment=environment;
         m_bot=bot;
+        m_messagesToCheck=new ArrayDeque<>();
+
     }
 
     @Override
     public void run() {
         start();
+
+
     }
 
     /**
      * запуск бота
      */
     public static void start() {
-        out.println(OutputMessages.HELLO_LINE.getOutput());
-        out.println(OutputMessages.HELLO_MENU.getOutput());
+        printToUser(OutputMessages.HELLO_LINE.getOutput());
+        printToUser(OutputMessages.HELLO_MENU.getOutput());
+
         Scanner input = new Scanner(in);
         String key = input.nextLine().toLowerCase(Locale.ROOT);
-
         runCommand(key, input);
     }
 
+    private static String getMessageFromPlayer() {
+        switch (m_environment){
+            case CONSOLE -> {
+                Scanner input = new Scanner(in);
+                String key = input.nextLine().toLowerCase(Locale.ROOT);
+                return key;
+            }
+            case TELEGRAM -> {
+            }
+        }
+        return null;
+    }
+
     public static String chooseDifficulty() {
-        out.println(OutputMessages.CHOOSE_DIFFICULT.getOutput());
+        printToUser(OutputMessages.CHOOSE_DIFFICULT.getOutput());
         Scanner scanner = new Scanner(in);
 
         return scanner.nextLine();
@@ -68,7 +87,7 @@ public class BotController implements Runnable{
         Command commandToExecute = commands.get(command);
         if (commandToExecute != null) commandToExecute.execute(command, user);
         else {
-            out.println(OutputMessages.WRONG_COMMAND_LINE.getOutput());
+            printToUser(OutputMessages.WRONG_COMMAND_LINE.getOutput());
             BotController.start();
         }
 
@@ -80,7 +99,7 @@ public class BotController implements Runnable{
      * @return строка с номером выбранной игры
      */
     public static String givePlayerPossibleChoice() {
-        out.println(OutputMessages.CHOOSE_GAME_MENU.getOutput());
+        printToUser(OutputMessages.CHOOSE_GAME_MENU.getOutput());
         Scanner input = new Scanner(in);
         return input.nextLine();
     }
@@ -128,7 +147,7 @@ public class BotController implements Runnable{
     private void fillCommands() {
         commands = new HashMap<>();
         commands.put("/start", new Start(this));
-        commands.put("/help", new Help(this));
+        commands.put("/help", new Help());
         commands.put("/exit", new Exit(this));
     }
 
@@ -141,7 +160,7 @@ public class BotController implements Runnable{
         game = gameName;
     }
 
-    private void printToUser(String text){
+    private static void printToUser(String text){
         switch (m_environment){
             case CONSOLE -> {
                 out.println(text);
@@ -160,6 +179,9 @@ public class BotController implements Runnable{
         m_chatId=chatId;
     }
 
+    public void putMessageFromPlayer(String text){
+        m_messagesToCheck.add(text);
+    }
     //private void setBot
 
 }

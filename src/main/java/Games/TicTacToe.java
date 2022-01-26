@@ -1,6 +1,7 @@
 package Games;
 
 import bot.Channel;
+
 import java.util.Random;
 import java.util.Scanner;
 
@@ -183,7 +184,7 @@ public class TicTacToe implements Game {
     private void printTable() {
         for (int i = 0; i < size; i++) {
             String line = "";
-            for (int j = 0; j < size; j++){
+            for (int j = 0; j < size; j++) {
                 line += " " + table[i][j];
                 //out.print(" " + table[i][j]);
             }
@@ -199,13 +200,13 @@ public class TicTacToe implements Game {
         int x, y;
         //out.println(USER_TICTACTOE_HELP_LINE.getOutput());
         printToUser(USER_TICTACTOE_HELP_LINE.getOutput());
-        x = Integer.parseInt(getInput())-1;//scanner.nextInt() - 1;
-        y = Integer.parseInt(getInput())-1;//scanner.nextInt() - 1;
+        x = Integer.parseInt(getInput()) - 1;//scanner.nextInt() - 1;
+        y = Integer.parseInt(getInput()) - 1;//scanner.nextInt() - 1;
         while (isCellNotValid(x, y)) {
             //out.println(USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
             printToUser(USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
-            x = Integer.parseInt(getInput())-1;//scanner.nextInt() - 1;
-            y = Integer.parseInt(getInput())-1;//scanner.nextInt() - 1;
+            x = Integer.parseInt(getInput()) - 1;//scanner.nextInt() - 1;
+            y = Integer.parseInt(getInput()) - 1;//scanner.nextInt() - 1;
         }
         table[y][x] = userSign;
     }
@@ -278,8 +279,8 @@ public class TicTacToe implements Game {
     }
 
     boolean checkWin(char symbol) {
-        for (int i = 0; i < size-winNumber+1; i++) {
-            for (int j = 0; j < size-winNumber+1; j++) {
+        for (int i = 0; i < size - winNumber + 1; i++) {
+            for (int j = 0; j < size - winNumber + 1; j++) {
                 if (checkDiagonal(symbol, i, j) || checkLanes(symbol, i, j)) return true;
             }
         }
@@ -293,9 +294,9 @@ public class TicTacToe implements Game {
         boolean toright, toleft;
         toright = true;
         toleft = true;
-        for (int i=0; i<winNumber; i++) {
-            toright &= (table[i+offsetX][i+offsetY] == symb);
-            toleft &= (table[winNumber-i-1+offsetX][i+offsetY] == symb);
+        for (int i = 0; i < winNumber; i++) {
+            toright &= (table[i + offsetX][i + offsetY] == symb);
+            toleft &= (table[winNumber - i - 1 + offsetX][i + offsetY] == symb);
         }
 
         if (toright || toleft) return true;
@@ -308,10 +309,10 @@ public class TicTacToe implements Game {
      */
     boolean checkLanes(char symb, int offsetX, int offsetY) {
         boolean cols, rows;
-        for (int col=offsetX; col<winNumber+offsetX; col++) {
+        for (int col = offsetX; col < winNumber + offsetX; col++) {
             cols = true;
             rows = true;
-            for (int row=offsetY; row<winNumber+offsetY; row++) {
+            for (int row = offsetY; row < winNumber + offsetY; row++) {
                 cols &= (table[col][row] == symb);
                 rows &= (table[row][col] == symb);
             }

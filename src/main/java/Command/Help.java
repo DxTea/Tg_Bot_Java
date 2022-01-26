@@ -10,9 +10,6 @@ import java.util.Scanner;
  */
 public class Help implements Command {
 
-    public Help(BotController consoleBotController) {
-    }
-
     @Override
     public void execute(String command, Scanner user) {
         System.out.println(OutputMessages.DESCRIPTION_LINE.getOutput());
