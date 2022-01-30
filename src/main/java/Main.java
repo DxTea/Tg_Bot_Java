@@ -32,7 +32,8 @@ public class Main {
 
         switch (environment) {
             case CONSOLE -> {
-                BotController.start();
+                BotController bot = new BotController();
+                bot.start();
             }
             case TELEGRAM -> {
                 try {

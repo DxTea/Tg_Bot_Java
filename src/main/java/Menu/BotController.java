@@ -3,7 +3,7 @@ package Menu;
 import Games.*;
 import Command.*;
 import Messeges.*;
-import bot.Bot;
+import bot.*;
 import bot.LaunchEnvironment;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -48,13 +48,15 @@ public class BotController implements Runnable{
     /**
      * запуск бота
      */
-    public static void start() {
+    public void start() {
         printToUser(OutputMessages.HELLO_LINE.getOutput());
         printToUser(OutputMessages.HELLO_MENU.getOutput());
 
         Scanner input = new Scanner(in);
         String key = input.nextLine().toLowerCase(Locale.ROOT);
-        runCommand(key, input);
+        this.runCommand(key);
+
+        messagesQueue queue = new messagesQueue();
     }
 
     private static String getMessageFromPlayer() {
@@ -81,14 +83,14 @@ public class BotController implements Runnable{
      * запуск команд
      *
      * @param command команда
-     * @param user    ввод пользователя
      */
-    private static void runCommand(String command, Scanner user) {
+    private void runCommand(String command) {
+        fillCommands();
         Command commandToExecute = commands.get(command);
-        if (commandToExecute != null) commandToExecute.execute(command, user);
+        if (commandToExecute != null) commandToExecute.execute(command);
         else {
             printToUser(OutputMessages.WRONG_COMMAND_LINE.getOutput());
-            BotController.start();
+            this.start();
         }
 
     }
@@ -120,10 +122,10 @@ public class BotController implements Runnable{
         Scanner scanner = new Scanner(in);
         String input = scanner.nextLine();
         PlayerAskAgainMenu playerAskAgainMenu = PlayerAskAgainMenu.getNameByGameNumber(input);
-
+        BotController bot = new BotController();
         switch (playerAskAgainMenu) {
             case EXIT -> exit(0);
-            case TO_MAIN_MENU -> BotController.start();
+            case TO_MAIN_MENU -> bot.start();
             case PLAY_AGAIN -> {
                 GameName gameName = GameName.valueOf(game);
                 switch (gameName) {
@@ -154,7 +156,7 @@ public class BotController implements Runnable{
     /**
      * определения игры
      *
-     * @param gameName имя игры, которую выбрает пользователь
+     * @param gameName имя игры, которую выбирает пользователь
      */
     public void setGame(String gameName) {
         game = gameName;
@@ -184,4 +186,7 @@ public class BotController implements Runnable{
     }
     //private void setBot
 
+    public Queue<String> getM_messagesToCheck() {
+        return m_messagesToCheck;
+    }
 }

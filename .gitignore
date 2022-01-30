@@ -110,3 +110,7 @@
 /target/classes/Games/SeaBattle/Coordinates.class
 /target/classes/Games/SeaBattle/PlayerShips.class
 /target/classes/Games/SeaBattle/Ships.class
+/target/classes/Menu/BotController$1.class
+/target/classes/Menu/BotController.class
+/target/classes/bot/LaunchEnvironment.class
+/target/classes/Main$1.class

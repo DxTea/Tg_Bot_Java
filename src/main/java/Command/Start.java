@@ -15,7 +15,7 @@ public class Start implements Command {
     }
 
     @Override
-    public void execute(String command, Scanner user) {
+    public void execute(String command) {
         BotController.playChosenGame(givePlayerPossibleChoice());
     }
 }

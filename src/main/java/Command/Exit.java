@@ -12,7 +12,7 @@ public class Exit implements Command {
     }
 
     @Override
-    public void execute(String command, Scanner user) {
+    public void execute(String command) {
         System.exit(0);
     }
 }

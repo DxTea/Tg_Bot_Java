@@ -23,6 +23,7 @@ public class GameChoicer {
      * @param gameName название игры
      */
     public static void playChosenGame(String gameName) {
+        BotController bot = new BotController();
         switch (getNameByGameNumber(gameName)) {
             case HANGMAN -> {
                 m_consoleBotController.setGame(HANGMAN.toString());
@@ -36,7 +37,7 @@ public class GameChoicer {
                 m_consoleBotController.setGame(BATTLESHIPWAR.toString());
                 BattleshipWar.start();
             }
-            case AGAIN -> BotController.start();
+            case AGAIN -> bot.start();
             default -> {
                 out.println(OutputMessages.WRONG_NAME);
                 playChosenGame(givePlayerPossibleChoice());

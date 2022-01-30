@@ -5,10 +5,21 @@ import java.util.List;
 
 public class AIShips extends Ships{
     public static List<AIShips> shipsList = new ArrayList<>();
-
+    /**
+     * четырехпалубный
+     */
     public static int countOfBattleShip;
+    /**
+     * трехпалубный
+     */
     public static int countOfCruiser;
+    /**
+     * двухпалубный
+     */
     public static int countOfDestroyer;
+    /**
+     * однопалубный
+     */
     public static int countOfSubmarine;
     public static int countAliveShip;
 

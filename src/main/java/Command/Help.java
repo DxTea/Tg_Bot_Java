@@ -11,10 +11,11 @@ import java.util.Scanner;
 public class Help implements Command {
 
     @Override
-    public void execute(String command, Scanner user) {
+    public void execute(String command) {
         System.out.println(OutputMessages.DESCRIPTION_LINE.getOutput());
         System.out.println(OutputMessages.HELP_LINE.getOutput());
-        user.nextLine();
-        BotController.start();
+//        user.nextLine();
+        BotController bot = new BotController();
+        bot.start();
     }
 }
