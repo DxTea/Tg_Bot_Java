@@ -105,12 +105,8 @@
 /target/classes/bot/Channel.class
 /target/classes/Bot.class
 /target/classes/bot/LaunchConslOrTg.class
-/target/classes/Games/SeaBattle/AIShips.class
-/target/classes/Games/SeaBattle/Battle.class
-/target/classes/Games/SeaBattle/Coordinates.class
-/target/classes/Games/SeaBattle/PlayerShips.class
-/target/classes/Games/SeaBattle/Ships.class
 /target/classes/Menu/BotController$1.class
 /target/classes/Menu/BotController.class
 /target/classes/bot/LaunchEnvironment.class
 /target/classes/Main$1.class
+/target/classes/bot/messagesQueue.class

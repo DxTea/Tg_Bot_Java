@@ -12,31 +12,31 @@ public class BattleshipWar implements Game{
     /**
      * размер игрового поля
      */
-    static final int FIELD_LENGTH = 10;
+    static final int FIELD_LENGTH = 12;
     /**
      * имя 1 игрока
      */
-    String player1Name;
+    private String player1Name;
     /**
      * имя второго игрока
      */
-    String player2Name;
+    private String player2Name;
     /**
      * карта игрока 1
      */
-    char[][] playerField1 = new char[FIELD_LENGTH][FIELD_LENGTH];
+    private char[][] playerField1 = new char[FIELD_LENGTH][FIELD_LENGTH];
     /**
      * карта игрока 2
      */
-    char[][] playerField2 = new char[FIELD_LENGTH][FIELD_LENGTH];
+    private char[][] playerField2 = new char[FIELD_LENGTH][FIELD_LENGTH];
     /**
      * карта выстрелов игрока 1
      */
-    char[][] playerBattleField1 = new char[FIELD_LENGTH][FIELD_LENGTH];
+    private char[][] playerBattleField1 = new char[FIELD_LENGTH][FIELD_LENGTH];
     /**
      * карта выстрелов игрока 1
      */
-    char[][] playerBattleField2 = new char[FIELD_LENGTH][FIELD_LENGTH];
+    private char[][] playerBattleField2 = new char[FIELD_LENGTH][FIELD_LENGTH];
     /**
      * символ пустой клетки
      */
@@ -85,20 +85,25 @@ public class BattleshipWar implements Game{
                     out.println(COOR_Y.getOutput());
                     y = scanner.nextInt();
 
-                    out.println(WHAT_POSITION.getOutput());
-                    position = scanner.nextInt();
+                    if (i != 1) {
+                        out.println(WHAT_POSITION.getOutput());
+                        position = scanner.nextInt();
+                    }
+                    else {
+                        position = 1;
+                    }
                     validationResult = validateCoordForShip(playerField, x, y, position, i);
                 }
 
                 if (position == 1) {
                     for (int q = 0; q < i; q++) {
-                        playerField[y-1][x-1 + q] = shipSymbol;
+                        playerField[y][x + q] = shipSymbol;
                     }
                 }
 
                 if (position == 2) {
                     for (int m = 0; m < i; m++) {
-                        playerField[y-1 + m][x-1] = shipSymbol;
+                        playerField[y + m][x] = shipSymbol;
                     }
                 }
                 printField(playerField);
@@ -110,13 +115,11 @@ public class BattleshipWar implements Game{
      * вывод игрового поля
      */
     static void printField(char[][] field) {
-        for (char[] cells : field) {
-            for (char cell : cells) {
-                if (cell == 0) {
-                    out.print(emptyCage + "  ");
-                } else {
-                    out.print(cell + "  ");
-                }
+        for (int i = 1; i <= 10; i++) {
+            for (int j = 1; j <= 10; j++) {
+                char cell = field[i][j];
+                if (cell == 0) out.print(emptyCage + "  ");
+                else out.print(cell + "  ");
             }
             out.println();
         }
@@ -129,9 +132,12 @@ public class BattleshipWar implements Game{
     public void play() {
         initializeNames();
         fillPlayerField(playerField1);
+        out.println("Игрок " + player1Name + "заполнил игровое поле.");
+        out.println("Очередь игрока " + player2Name + "!");
         fillPlayerField(playerField2);
+
         String currentPlayerName = player1Name;
-        char[][] currentPlayerField = playerField2;
+        char[][] currentPlayerField = playerField1;
         char[][] currentPlayerBattleField = playerBattleField1;
 
         while (isPlayerAlive(playerField1) && isPlayerAlive(playerField2)) {
@@ -187,29 +193,35 @@ public class BattleshipWar implements Game{
      */
     private static int validateCoordForShip(char[][] field, int x, int y, int position, int shipType) {
         if (position == 1) {
-            for (int i = 0; i < shipType - 1; i++) {
+            for (int i = -1; i < shipType + 1; i++) {
                 try {
-                if (shipSymbol == field[y][x + i]
-                        || shipSymbol == field[y - 1][x + i]
-                        || shipSymbol == field[y + 1][x + i]
-                        || shipSymbol == field[y][x + i + 1]
-                        || shipSymbol == field[y][x + i - 1]
-                        || (x + i) > 9) {
-                    return -1;
-                } }
+//                if (shipSymbol == field[y][x + i]
+//                        || shipSymbol == field[y - 1][x + i]
+//                        || shipSymbol == field[y + 1][x + i]
+//                        || shipSymbol == field[y][x + i + 1]
+//                        || shipSymbol == field[y][x + i - 1]
+//                        || (x + i) > 9) {
+                    if (field[y][x+i] == shipSymbol
+                            || field[y-1][x+i] == shipSymbol
+                            || field[y+1][x+i] == shipSymbol)
+                        return -1;
+                }
                 catch (ArrayIndexOutOfBoundsException e) { return -1; }
             }
         } else if (position == 2) {
-            for (int i = 0; i < shipType - 1; i++) {
+            for (int i = -1; i < shipType + 1; i++) {
                 try {
-                if (shipSymbol == field[y][x + i]
-                        || shipSymbol == field[y - 1][x + i]
-                        || shipSymbol == field[y + 1][x + i]
-                        || shipSymbol == field[y][x + i + 1]
-                        || shipSymbol == field[y][x + i - 1]
-                        || (y + i) > 9) {
-                    return -1;
-                } }
+//                if (shipSymbol == field[y][x + i]
+//                        || shipSymbol == field[y - 1][x + i]
+//                        || shipSymbol == field[y + 1][x + i]
+//                        || shipSymbol == field[y][x + i + 1]
+//                        || shipSymbol == field[y][x + i - 1]
+//                        || (y + i) > 9) {
+                    if (field[y+i][x] == shipSymbol
+                            || field[y+i][x-1] == shipSymbol
+                            || field[y+i][x+1] == shipSymbol)
+                        return -1;
+                }
                 catch (ArrayIndexOutOfBoundsException e) { return -1; }
             }
         }
