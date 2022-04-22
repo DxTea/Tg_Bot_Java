@@ -40,7 +40,9 @@ public class GameChoicer {
             case AGAIN -> bot.start();
             default -> {
                 out.println(OutputMessages.WRONG_NAME);
-                playChosenGame(givePlayerPossibleChoice());
+                givePlayerPossibleChoice();
+                String userAnswer=m_consoleBotController.getUserAnswer();
+                playChosenGame(userAnswer);
             }
         }
     }

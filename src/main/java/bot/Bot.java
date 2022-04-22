@@ -14,17 +14,16 @@ import java.util.*;
 public class Bot extends TelegramLongPollingBot {
     private boolean isGameChosen = false;
     private BotController m_botController;
-    private Map<String, BotController> chatIdToBotController=new HashMap<>();
+    private final Map<String, BotController> chatIdToBotController=new HashMap<>();
 
     @Override
     public void onUpdateReceived(Update update) {
         // We check if the update has a message and the message has text
         if (update.hasMessage() && update.getMessage().hasText()) {
+
             String input = update.getMessage().getText();
             String chatId = update.getMessage().getChatId().toString();
-            //SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
-            //message.setChatId(update.getMessage().getChatId().toString());
-            //message.setText(update.getMessage().getText());
+
             if (!chatIdToBotController.containsKey(chatId)){
                 BotController controller = new BotController(LaunchEnvironment.TELEGRAM, this);
                 controller.setChatId(chatId);
@@ -32,8 +31,18 @@ public class Bot extends TelegramLongPollingBot {
                 Thread controllerThread=new Thread(controller);
                 controllerThread.start();
             } else {
-                chatIdToBotController.get(chatId).putMessageFromPlayer(input);
+                synchronized (chatIdToBotController){
+                    chatIdToBotController.get(chatId).putMessageFromPlayer(input);
+                }
             }
+        }
+    }
+
+    public void sendMessageToUser(String chatId, String message){
+        try {
+            execute(SendMessage.builder().chatId(chatId).text(message).build());
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 

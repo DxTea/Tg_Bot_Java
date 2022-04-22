@@ -10,12 +10,17 @@ import static Menu.BotController.givePlayerPossibleChoice;
  * запуск бота
  */
 public class Start implements Command {
+    private BotController botController;
 
     public Start(BotController consoleBotController) {
+        botController=consoleBotController;
     }
 
     @Override
     public void execute(String command) {
-        BotController.playChosenGame(givePlayerPossibleChoice());
+        givePlayerPossibleChoice();
+        String answer=botController.getUserAnswer();
+        BotController.playChosenGame(answer);
     }
+
 }
