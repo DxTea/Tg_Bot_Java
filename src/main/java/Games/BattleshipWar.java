@@ -45,6 +45,14 @@ public class BattleshipWar implements Game{
      * символ палубы корабля
      */
     final static char shipSymbol = '■';
+    /**
+     * символ, если игрок попал
+     */
+    public static final char hitSymbol = '#';
+    /**
+     * символ, если мимо
+     */
+    public static final char pastSymbol = '*';
 
     /**
      * запуск игры
@@ -106,7 +114,8 @@ public class BattleshipWar implements Game{
                         playerField[y + m][x] = shipSymbol;
                     }
                 }
-                printField(playerField);
+                char [][] emptyBattleField = new char[12][2];
+                printField(playerField, emptyBattleField);
             }
         }
     }
@@ -114,10 +123,16 @@ public class BattleshipWar implements Game{
     /**
      * вывод игрового поля
      */
-    static void printField(char[][] field) {
+    static void printField(char[][] field, char[][] battleField) {
         for (int i = 1; i <= 10; i++) {
             for (int j = 1; j <= 10; j++) {
                 char cell = field[i][j];
+                if (cell == 0) out.print(emptyCage + "  ");
+                else out.print(cell + "  ");
+            }
+            out.print("            ");
+            for (int k = 1; k <= battleField[i].length-2; k++) {
+                char cell = battleField[i][k];
                 if (cell == 0) out.print(emptyCage + "  ");
                 else out.print(cell + "  ");
             }
@@ -132,12 +147,12 @@ public class BattleshipWar implements Game{
     public void play() {
         initializeNames();
         fillPlayerField(playerField1);
-        out.println("Игрок " + player1Name + "заполнил игровое поле.");
+        out.println("Игрок " + player1Name + " заполнил игровое поле.");
         out.println("Очередь игрока " + player2Name + "!");
         fillPlayerField(playerField2);
 
         String currentPlayerName = player1Name;
-        char[][] currentPlayerField = playerField1;
+        char[][] currentPlayerField = playerField2;
         char[][] currentPlayerBattleField = playerBattleField1;
 
         while (isPlayerAlive(playerField1) && isPlayerAlive(playerField2)) {
@@ -148,10 +163,14 @@ public class BattleshipWar implements Game{
 
             int shotResult = handleShot(currentPlayerBattleField, currentPlayerField, xShot, yShot);
 
-            if (shotResult == 0) {
+            if (shotResult == 0 && currentPlayerName == player1Name) {
                 currentPlayerName = player2Name;
                 currentPlayerField = playerField1;
                 currentPlayerBattleField = playerBattleField2;
+            } else if (shotResult == 0 && currentPlayerName == player2Name) {
+                currentPlayerName = player1Name;
+                currentPlayerField = playerField2;
+                currentPlayerBattleField = playerBattleField1;
             }
         }
         out.println(currentPlayerName + " выиграл!");
@@ -163,13 +182,17 @@ public class BattleshipWar implements Game{
      */
     private static int handleShot(char[][] battleField, char[][] field, int x, int y) {
         if (field[y][x] == shipSymbol) {
-            field[y][x] = '#';
-            battleField[y][x] = '#';
+            field[y][x] = hitSymbol;
+            battleField[y][x] = hitSymbol;
             out.println(RIGHT_SHOT.getOutput());
+            printField(field, battleField);
+            out.println("Следующий выстрел за тобой!");
             return 1;
         }
-        battleField[y][x] = '*';
+        battleField[y][x] = pastSymbol;
         out.println(BAD_SHOT.getOutput());
+        printField(field, battleField);
+        out.println("Очередь другого игрока!");
         return 0;
     }
 

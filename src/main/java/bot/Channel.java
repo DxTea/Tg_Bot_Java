@@ -15,6 +15,8 @@ public class Channel {
     private final Bot m_bot;
     private final String m_chatId;
 
+    private Queue<String> m_messagesToCheck = new ArrayDeque<>();
+
     public void sendToUser(String output) {
         try {
             m_bot.execute(SendMessage.builder().chatId(m_chatId).text(output).build());
@@ -24,10 +26,12 @@ public class Channel {
     }
 
     public void queueMessagesToGame(String input) {
- //       m_messagesToCheck.add(input);
+        m_messagesToCheck.add(input);
     }
 
     public String sendToGame() {
-        return "";
+        if (!m_messagesToCheck.isEmpty())
+            return m_messagesToCheck.poll();
+        return null;
     }
 }

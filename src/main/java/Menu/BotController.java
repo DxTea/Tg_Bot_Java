@@ -23,6 +23,7 @@ public class BotController implements Runnable{
     private Queue<String> m_messagesToHandle;
     private final Queue<String> m_messagesToTryFindAnswer;
     private boolean go=false;
+    public Channel channel;
 
     public BotController() {
         fillCommands();
@@ -149,10 +150,11 @@ public class BotController implements Runnable{
         commands.put("/start", new Start(this));
         commands.put("/help", new Help());
         commands.put("/exit", new Exit(this));
-        /*commands.put("/"+StartHangman.class.getName(), new StartHangman(this));
-        commands.put("/"+ StartTicTacToe.class.getName(), new StartTicTacToe(this));
-        commands.put("/"+ StartBattleShipWar.class.getName(), new StartBattleShipWar(this));
-        commands.put("/"+ Back.class.getName(), new Back(this));*/
+        commands.put("/"+ StartTicTacToe.class.getSimpleName(), new StartTicTacToe(this));
+        commands.put("/"+ StartHangman.class.getSimpleName(), new StartHangman(this));
+        commands.put("/"+ StartBattleShipWar.class.getSimpleName(), new StartBattleShipWar(this));
+        commands.put("/"+ Back.class.getSimpleName(), new Back(this));
+        //commands.put("any", new TranferInput(this, ))
     }
 
     /**
@@ -181,6 +183,7 @@ public class BotController implements Runnable{
 
     public void putMessageFromPlayer(String text){
         m_messagesToHandle.add(text);
+        channel.queueMessagesToGame(text);
     }
     //private void setBot
 

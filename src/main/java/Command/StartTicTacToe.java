@@ -1,5 +1,6 @@
 package Command;
 
+import Games.Game;
 import Menu.BotController;
 
 public class StartTicTacToe implements Command {
@@ -8,6 +9,6 @@ public class StartTicTacToe implements Command {
 
     @Override
     public void execute(String command) {
-
+        BotController.playChosenGame("2");
     }
 }

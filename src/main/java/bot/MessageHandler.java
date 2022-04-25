@@ -15,8 +15,9 @@ public class MessageHandler implements Runnable{
                 String command = messagesToCheck.poll();
                 if (command==null) throw new IllegalArgumentException();
                 if (botController.hasCommand(command)) botController.runCommand(command);
-                else if (command.length()<5) botController.receiveMessageFromPlayer(command);
-                botController.wakeUp();
+                else if (command.length()<5)
+                    botController.receiveMessageFromPlayer(command);
+                // botController.wakeUp();
                 // TODO: 1) handle commands (you have those in botController)
                 // TODO: 2) reroute input and output to tg or have ability to get input from here.
                 // done
