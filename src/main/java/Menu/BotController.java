@@ -52,9 +52,9 @@ public class BotController implements Runnable{
         printToUser(OutputMessages.HELLO_LINE.getOutput());
         printToUser(OutputMessages.HELLO_MENU.getOutput());
 
-        MessageHandler messageHandler = new MessageHandler(m_messagesToHandle, this);
-        Thread messageHandlerThread= new Thread(messageHandler);
-        messageHandlerThread.start();
+//        GameHandler gameHandler = new GameHandler(m_messagesToHandle, this);
+//        Thread messageHandlerThread= new Thread(gameHandler);
+//        messageHandlerThread.start();
     }
 
 /*
@@ -172,7 +172,7 @@ public class BotController implements Runnable{
                 out.println(text);
             }
             case TELEGRAM -> {
-                    m_bot.sendMessageToUser(m_chatId, text);
+//                    m_bot.sendMessageToUser(m_chatId, text);
             }
         }
     }
@@ -191,9 +191,9 @@ public class BotController implements Runnable{
         return m_messagesToHandle;
     }
 
-    public void sendMessageToPlayer(String text){
-        m_bot.sendMessageToUser(m_chatId, text);
-    }
+//    public void sendMessageToPlayer(String text){
+//        m_bot.sendMessageToUser(m_chatId, text);
+//    }
 
     public void receiveMessageFromPlayer(String message){
         synchronized (m_messagesToTryFindAnswer){
