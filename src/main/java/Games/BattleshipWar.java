@@ -174,7 +174,6 @@ public class BattleshipWar implements Game{
             }
         }
         out.println(currentPlayerName + " выиграл!");
-        askPlayerAgain();
     }
 
     /**

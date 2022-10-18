@@ -56,7 +56,8 @@ public class TicTacToe implements Game {
         //out.println(USER_TICTACTOE_CHOOSE_CHAR_LINE.getOutput());
         printToUser(USER_TICTACTOE_CHOOSE_CHAR_LINE.getOutput());
         while (true) {
-            char symbol = channel.sendToGame().charAt(0); //scanner.next().charAt(0); //
+//            char symbol = channel.sendToGame().charAt(0); //scanner.next().charAt(0); //
+            char symbol = x;
             if (symbol == x) {
                 userSign = x;
                 AISign = zero;
@@ -69,7 +70,7 @@ public class TicTacToe implements Game {
             }
             //out.println(USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
             printToUser(USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
-            channel.sendToUser(USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
+//            channel.sendToUser(USER_TICTACTOE_TRY_AGAIN_LINE.getOutput());
 
         }
     }
@@ -108,14 +109,14 @@ public class TicTacToe implements Game {
                 //out.println(LOOSE.getOutput());
                 printToUser((LOOSE.getOutput()));
                 printTable();
-                askPlayerAgain();
+//                askPlayerAgain();
                 break;
             }
             if (isTableFull()) {
                 //out.println(DRAW.getOutput());
                 printToUser(DRAW.getOutput());
                 printTable();
-                askPlayerAgain();
+//                askPlayerAgain();
                 break;
             }
             userTurn();
@@ -123,14 +124,14 @@ public class TicTacToe implements Game {
                 //out.println(WIN.getOutput());
                 printToUser(WIN.getOutput());
                 printTable();
-                askPlayerAgain();
+//                askPlayerAgain();
                 break;
             }
             if (isTableFull()) {
                 //out.println(DRAW.getOutput());
                 printToUser(DRAW.getOutput());
                 printTable();
-                askPlayerAgain();
+//                askPlayerAgain();
                 break;
             }
         }
@@ -339,11 +340,12 @@ public class TicTacToe implements Game {
 
     private String getInput() {
         //scanner.next();
-        return channel.sendToGame();
+//        return channel.sendToGame();
+        return "";
     }
 
     private void printToUser(String output) {
         out.println(output);
-        channel.sendToUser(output);
+//        channel.sendToUser(output);
     }
 }

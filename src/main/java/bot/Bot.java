@@ -1,5 +1,6 @@
 package bot;
 
+import Games.BasePlayer;
 import Games.Player;
 import Messeges.GameName;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -27,8 +28,8 @@ public class Bot extends TelegramLongPollingBot {
     private final String startHangmanCommand = "/start_Hangman"; // createLobbyHangmanCommand
     private final String startBattleshipWarCommand = "/start_BattleshipWar"; // createLobbyBattleshipWarCommand
     private final String showLobbiesCommand = "/show_lobbies";
-    private final String[] standardCommands = {startCommand, helpCommand, exitCommand, startTicTacToeCommand,
-            startHangmanCommand, startBattleshipWarCommand, showLobbiesCommand};
+    private final String[] standardCommands = {startCommand, helpCommand, exitCommand};
+    private final String[] standardGameCommands = {startHangmanCommand};
 
     @Override
     public String getBotUsername() {
@@ -56,18 +57,19 @@ public class Bot extends TelegramLongPollingBot {
                     }
                 }
             }
-            operateWithUserFirstly(messageFromInput, currentUser);
+            operateWithUserFirstly(messageFromInput, currentUser, chatId);
         }
     }
 
-    private void operateWithUserFirstly(String messageFromInput, String currentUser) {
+    private void operateWithUserFirstly(String messageFromInput, String currentUser, String chatId) {
         switch (messageFromInput) {
             case startCommand -> sendOutputToUser(currentUser,
-                    standardCommands,
-                    "Вот список доступных команд", true);
+                    standardGameCommands,
+                    "Привет! Это телеграмм-бот, в котором можно поиграть в виселицу, начинай!", true);
             case helpCommand -> sendOutputToUser(currentUser, standardCommands,
                     "Нажми старт", true);
-            case startTicTacToeCommand -> createLobby(currentUser, GameName.TICTACTOE);
+            case exitCommand -> killLobby(currentUser, chatId, GameName.HANGMAN);
+            case startHangmanCommand -> createLobby(currentUser, GameName.HANGMAN);
         }
     }
 
@@ -78,7 +80,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private static GameHandler getLobby(String currentUser, String chatId, GameName game, Bot telegramBot) {
-        Player player = null;
+        Player player = new BasePlayer();
         GameHandler lobby = new GameHandler(currentUser, chatId, player, new GameLogicToBot(telegramBot), game);
         return lobby;
     }
@@ -88,11 +90,10 @@ public class Bot extends TelegramLongPollingBot {
         lobbyThread.start();
     }
 
-    public void killLobby() {
-        for (GameHandler lobby : lobbies) {
-            sendOutputToUser(lobby.m_creator, standardCommands, "Пока!", true);
-            lobbies.remove(lobby);
-        }
+    public void killLobby(String currentUser, String chatId, GameName game) {
+        GameHandler lobby = getLobby(currentUser, chatId, game, this);
+        sendOutputToUser(lobby.m_creator, standardCommands, "Пока!", true);
+        lobbies.remove(lobby);
     }
 
     public void sendOutputToUser(String playerName, String[] availableCommands, String text, boolean commandsInRows) {
