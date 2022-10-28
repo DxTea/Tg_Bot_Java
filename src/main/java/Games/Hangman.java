@@ -1,29 +1,25 @@
 package Games;
 
+import bot.GameLogicToBot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import static Messeges.OutputMessages.*;
-import static java.lang.System.*;
 
 /**
  * Виселица
  */
-public class Hangman implements Game {
+public class Hangman extends BaseGameLogic {
     /**
      * маска скрытого слова
      */
     private static final char hiddenWordMask = '_';
     /**
-     * флаг выхода из программы
-     */
-    private static boolean exitFlag = false;
-    /**
      * количество жизней
      */
     private int lives = 5;
+    private boolean exitFlag;
     /**
      * скрытое слово
      */
@@ -37,18 +33,24 @@ public class Hangman implements Game {
      */
     private final List<Character> mistakes;
 
+    private final BasePlayer currentPlayer;
+
     /**
      * конструктор
      *
      * @param word зашифрованное слово
      */
-    public Hangman(String word) {
+    public Hangman(BasePlayer player, String word, GameLogicToBot logic) {
+        super(player);
+        currentPlayer = player;
+        gameLogicToBot = logic;
         hiddenWord = word.toLowerCase();
         progress = new ArrayList<>();
         for (int i = 0; i < hiddenWord.length(); i++) {
             progress.add(hiddenWordMask);
         }
         mistakes = new ArrayList<>();
+        exitFlag = false;
     }
 
     /**
@@ -84,15 +86,18 @@ public class Hangman implements Game {
     /**
      * запуск игры
      */
-    public static void start() {
-//        String difficult = chooseDifficulty();
-        String difficult = "1";
+    public void start() {
+        String difficult = chooseDifficulty();
         Hangman currentGame;
         String word = generateWord(difficult);
         while (!exitFlag) {
-            currentGame = new Hangman(word);
+            currentGame = new Hangman(currentPlayer, word, gameLogicToBot);
             currentGame.play();
         }
+    }
+
+    private String chooseDifficulty() {
+        return "1";
     }
 
     /**
@@ -101,14 +106,16 @@ public class Hangman implements Game {
     @Override
     public void play() {
         printProgress();
-        Scanner scanner = new Scanner(in);
+        String[] msg4 = new String[]{"\n\n\n" + INPUT.getOutput()};
+        sendToUser(msg4, currentPlayer.getPlayerName(), false);
         for (; ; ) {
-            String input = scanner.nextLine().toLowerCase();
+            String input = getFromUser().toLowerCase();
             if (checkCorrectInput(input)) break;
         }
-        out.println(ANSWER.getOutput() + hiddenWord.toUpperCase() + "\n");
-        exitFlag = false;
-
+//        String[] msg = new String[]{ANSWER.getOutput() + hiddenWord.toUpperCase() + "\n"};
+        String[] msg = new String[]{ANSWER.getOutput() + hiddenWord.toUpperCase()};
+        sendToUser(msg, currentPlayer.getPlayerName(), false);
+//        exitFlag = false;
     }
 
     private boolean checkCorrectInput(String input) {
@@ -116,7 +123,8 @@ public class Hangman implements Game {
             char userVariant = input.charAt(0);
             return checkInput(userVariant);
         } else {
-            out.print(INPUT.getOutput());
+            String[] msg = new String[]{INPUT.getOutput()};
+            sendToUser(msg, currentPlayer.getPlayerName(), false);
         }
         return false;
     }
@@ -125,18 +133,20 @@ public class Hangman implements Game {
         if (!mistakes.contains(userVariant) && !progress.contains(userVariant)) {
             return checkGuessCase(userVariant);
         } else {
-            out.println(SAME.getOutput());
-            out.print(INPUT.getOutput());
+            String[] msg = new String[]{SAME.getOutput(), "\n", INPUT.getOutput()};
+            sendToUser(msg, currentPlayer.getPlayerName(), false);
         }
         return false;
     }
 
     private boolean checkGuessCase(char userVariant) {
         if (checkGuess(userVariant)) {
-            out.print(RIGHT.getOutput() + "\n");
+            String[] msg = new String[]{RIGHT.getOutput() + "\n"};
+            sendToUser(msg, currentPlayer.getPlayerName(), false);
             if (winCase()) return true;
         } else {
-            out.print(WRONG.getOutput() + "\n");
+            String[] msg = new String[]{WRONG.getOutput() + "\n"};
+            sendToUser(msg, currentPlayer.getPlayerName(), false);
             mistakes.add(userVariant);
             if (looseCase()) return true;
         }
@@ -146,7 +156,8 @@ public class Hangman implements Game {
 
     private boolean looseCase() {
         if (--lives == 0) {
-            out.println("\n" + LOOSE.getOutput());
+            String[] msg = new String[]{"\n" + LOOSE.getOutput()};
+            sendToUser(msg, currentPlayer.getPlayerName(), false);
             exitFlag = true;
             return true;
         }
@@ -155,7 +166,8 @@ public class Hangman implements Game {
 
     private boolean winCase() {
         if (!progress.contains(hiddenWordMask)) {
-            out.println(WIN.getOutput());
+            String[] msg = new String[]{WIN.getOutput()};
+            sendToUser(msg, currentPlayer.getPlayerName(), false);
             exitFlag = true;
             return true;
         }
@@ -181,14 +193,38 @@ public class Hangman implements Game {
      * метод показывает прогресс слова, оставшиеся жизни и запрашивает ввод новой буквы
      */
     private void printProgress() {
-        out.print(WORD.getOutput());
+        String[] msg = new String[]{WORD.getOutput()};
+        sendToUser(msg, currentPlayer.getPlayerName(), false);
+        String[] msg1 = new String[1];
+        msg1[0] = "";
         for (char letter : progress) {
-            out.print(" " + letter);
+//            String[] msg1 = new String[]{" " + letter};
+//            sendToUser(msg1, currentPlayer.getPlayerName(), false);
+            msg1[0] = msg1[0] + " " + letter;
         }
-        out.print("\n" + LIFE.getOutput());
+        sendToUser(msg1, currentPlayer.getPlayerName(), false);
+
+        String[] msg2 = new String[]{"\n" + LIFE.getOutput()};
+        sendToUser(msg2, currentPlayer.getPlayerName(), false);
+        String[] msg3 = new String[lives];
         for (int i = 0; i < lives; i++) {
-            out.print("💙");
+//            String[] msg3 = new String[]{"💙"};
+//            sendToUser(msg3, currentPlayer.getPlayerName(), false);
+            msg3[i] = "💙";
         }
-        out.print("\n\n\n" + INPUT.getOutput());
+        sendToUser(msg3, currentPlayer.getPlayerName(), false);
+
+//        String[] msg4 = new String[]{"\n\n\n" + INPUT.getOutput()};
+//        sendToUser(msg4, currentPlayer.getPlayerName(), false);
+    }
+
+    @Override
+    public boolean defineEndOfGame() {
+        return exitFlag;
+    }
+
+    @Override
+    public void run() {
+        start();
     }
 }

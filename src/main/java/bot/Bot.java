@@ -68,7 +68,7 @@ public class Bot extends TelegramLongPollingBot {
                     "Привет! Это телеграмм-бот, в котором можно поиграть в виселицу, начинай!", true);
             case helpCommand -> sendOutputToUser(currentUser, standardCommands,
                     "Нажми старт", true);
-            case exitCommand -> killLobby(currentUser, chatId, GameName.HANGMAN);
+            case exitCommand -> killLobby(currentUser);
             case startHangmanCommand -> createLobby(currentUser, GameName.HANGMAN);
         }
     }
@@ -80,7 +80,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private static GameHandler getLobby(String currentUser, String chatId, GameName game, Bot telegramBot) {
-        Player player = new BasePlayer();
+        Player player = new BasePlayer(currentUser);
         GameHandler lobby = new GameHandler(currentUser, chatId, player, new GameLogicToBot(telegramBot), game);
         return lobby;
     }
@@ -90,8 +90,10 @@ public class Bot extends TelegramLongPollingBot {
         lobbyThread.start();
     }
 
-    public void killLobby(String currentUser, String chatId, GameName game) {
-        GameHandler lobby = getLobby(currentUser, chatId, game, this);
+    public void killLobby(String currentUser) {
+        String chatID = playerNameToChatId.get(currentUser);
+        GameName game = GameName.HANGMAN;
+        GameHandler lobby = getLobby(currentUser, chatID, game, this);
         sendOutputToUser(lobby.m_creator, standardCommands, "Пока!", true);
         lobbies.remove(lobby);
     }

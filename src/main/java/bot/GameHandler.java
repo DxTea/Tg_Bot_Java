@@ -1,8 +1,6 @@
 package bot;
 
-import Games.Game;
-import Games.Hangman;
-import Games.Player;
+import Games.*;
 import Messeges.GameName;
 
 import java.util.*;
@@ -12,7 +10,7 @@ public class GameHandler implements Runnable{
     public Map<String, String> m_playerNameToChatId;
     public ConcurrentLinkedQueue<Message> m_playerMessages;
     private Thread m_gameThread;
-    private Game m_gameLogic;
+    private BaseGameLogic m_gameLogic;
 
     public String m_creator;
     public Player m_player;
@@ -23,7 +21,7 @@ public class GameHandler implements Runnable{
     private final String quitGameCommand = "/quit_game";
     private final String helpCommand = "/help";
     private final String exitCommand = "/exit";
-    private final String[] availableCommands = {startGameCommand, helpCommand};
+    private final String[] availableCommands = {startGameCommand, helpCommand, exitCommand};
     private final String[] m_defaultCommands = {helpCommand, exitCommand};
     private String[] m_availableCommandsInGame = {quitGameCommand};
     private boolean m_gameStarted;
@@ -44,7 +42,7 @@ public class GameHandler implements Runnable{
     }
 
     private void sendOutputToUser(String playerName, String[] availableCommands, String text, boolean commandsInRows) {
-        m_availableCommandsInGame = availableCommands;
+//        m_availableCommandsInGame = availableCommands;
         m_gameLogicToBot.sendOutputToUser(playerName, availableCommands,  text, commandsInRows, false);
     }
 
@@ -57,11 +55,17 @@ public class GameHandler implements Runnable{
                     ifPlayerAsksHelp(message);
                     ifGameStarts(message);
                 } else { // in-game logic
-                    if (message.m_message.startsWith(startPrefix)) continue;
-                    m_availableCommandsInGame = m_gameLogicToBot.getAvailableCommands();
-                    sendOutputToUser(message.m_playerName, m_defaultCommands,
-                            "Not your turn" + "Try again",
-                            true);
+                    if (m_gameLogic.defineEndOfGame()) {
+                        m_gameLogicToBot.killLobby();
+                        continue;
+                    }
+                    m_gameLogicToBot.setInputMessage(message.m_message);
+
+//                    if (message.m_message.startsWith(startPrefix)) continue;
+//                    m_availableCommandsInGame = m_gameLogicToBot.getAvailableCommands();
+//                    sendOutputToUser(message.m_playerName, m_defaultCommands,
+//                            "Что-то пошло не так! Error 404",
+//                            true);
                 }
             }
             try {
@@ -74,7 +78,8 @@ public class GameHandler implements Runnable{
 
     private void ifPlayerAsksHelp(Message message) {
         if (isEquals(message, helpCommand)){
-            sendOutputToUser(message.m_playerName, availableCommands, "Press start", true);
+            sendOutputToUser(message.m_playerName, availableCommands, "Чтобы начать игру, нажми на команду /start_game" +
+                    "\n" + "Если игра не запускается, нажми /exit и начни все сначала", true);
         }
     }
 
@@ -84,15 +89,20 @@ public class GameHandler implements Runnable{
         }
     }
 
+    private void ifPlayerAskExit(Message message) {
+        if (isEquals(message, startGameCommand)) {
+            establishAndStartGameThread();
+        }
+    }
+
     private void establishAndStartGameThread() {
         switch (m_game) {
-//            case HANGMAN -> m_gameLogic = new Hangman(getBasePlayerArray(m_playerList), new Deck(m_deckType), m_gameLogicToBot);
-            case HANGMAN -> Hangman.start();
+            case HANGMAN -> m_gameLogic = new Hangman((BasePlayer) m_player, "", m_gameLogicToBot);
             default -> throw new IllegalStateException();
         }
         m_gameThread = new Thread((Runnable) m_gameLogic);
         m_gameStarted = true;
-        sendOutputToUser(m_gameLogicToBot.getCurrentPlayer(), m_availableCommandsInGame,
+        sendOutputToUser(this.m_creator, m_availableCommandsInGame,
                 "Игра началась", true);
         try {
             Thread.sleep(50);
