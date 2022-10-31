@@ -94,8 +94,15 @@ public class Bot extends TelegramLongPollingBot {
         String chatID = playerNameToChatId.get(currentUser);
         GameName game = GameName.HANGMAN;
         GameHandler lobby = getLobby(currentUser, chatID, game, this);
-        sendOutputToUser(lobby.m_creator, standardCommands, "Пока!", true);
+        sendOutputToUser(lobby.m_creator, standardCommands, "_", true);
         lobbies.remove(lobby);
+    }
+
+    public void killAllLobbies() {
+        for (GameHandler lobby : lobbies){
+            sendOutputToUser(lobby.m_creator, standardCommands, "_", true);
+            lobbies.remove(lobby);
+        }
     }
 
     public void sendOutputToUser(String playerName, String[] availableCommands, String text, boolean commandsInRows) {

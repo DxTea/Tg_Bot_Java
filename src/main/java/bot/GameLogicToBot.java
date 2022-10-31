@@ -40,6 +40,8 @@ public class GameLogicToBot {
 
     public void killLobby(){ m_telegramBot.killLobby(m_currentPlayer.getPlayerName());}
 
+    public void killAllLobbies(){ m_telegramBot.killAllLobbies();}
+
     public Player getCurrentPlayer(){ return m_currentPlayer;}
 
     public String[] getAvailableCommands() {

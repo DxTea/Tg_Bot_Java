@@ -11,6 +11,7 @@ public class GameHandler implements Runnable{
     public ConcurrentLinkedQueue<Message> m_playerMessages;
     private Thread m_gameThread;
     private BaseGameLogic m_gameLogic;
+    public volatile boolean exitFlag;
 
     public String m_creator;
     public Player m_player;
@@ -21,11 +22,11 @@ public class GameHandler implements Runnable{
     private final String quitGameCommand = "/quit_game";
     private final String helpCommand = "/help";
     private final String exitCommand = "/exit";
+    private final String restartCommand = "/restart";
     private final String[] availableCommands = {startGameCommand, helpCommand, exitCommand};
     private final String[] m_defaultCommands = {helpCommand, exitCommand};
     private String[] m_availableCommandsInGame = {quitGameCommand};
     private boolean m_gameStarted;
-    private final String startPrefix = "/start";
 
     public GameHandler(String creator, String chatId, Player player,
                        GameLogicToBot gameLogicToBot, GameName game) {
@@ -37,7 +38,7 @@ public class GameHandler implements Runnable{
         m_playerMessages = new ConcurrentLinkedQueue<>();
         m_playerNameToChatId.put(creator, chatId);
         m_gameStarted = false;
-        String firstText = "Давай начнем!";
+        String firstText = "_";
         sendOutputToUser(creator, availableCommands, firstText, true);
     }
 
@@ -54,11 +55,14 @@ public class GameHandler implements Runnable{
                 if (!m_gameStarted) {
                     ifPlayerAsksHelp(message);
                     ifGameStarts(message);
+                    ifPlayerAskExit(message);
                 } else { // in-game logic
                     if (m_gameLogic.defineEndOfGame()) {
-                        m_gameLogicToBot.killLobby();
+                        ifPlayerAskRestart(message);
+                        ifPlayerAskQuit(message);
                         continue;
                     }
+                    ifPlayerAskQuit(message);
                     m_gameLogicToBot.setInputMessage(message.m_message);
 
 //                    if (message.m_message.startsWith(startPrefix)) continue;
@@ -90,14 +94,29 @@ public class GameHandler implements Runnable{
     }
 
     private void ifPlayerAskExit(Message message) {
-        if (isEquals(message, startGameCommand)) {
+        if (isEquals(message, exitCommand)) {
+            m_gameLogicToBot.killAllLobbies();
+        }
+    }
+
+    private void ifPlayerAskRestart(Message message) {
+        if (isEquals(message, restartCommand)) {
+            m_gameLogicToBot.killLobby();
+            exitFlag = false;
             establishAndStartGameThread();
+        }
+    }
+
+    private void ifPlayerAskQuit(Message message) {
+        if (isEquals(message, quitGameCommand)) {
+            exitFlag = true;
+            m_gameLogicToBot.killAllLobbies();
         }
     }
 
     private void establishAndStartGameThread() {
         switch (m_game) {
-            case HANGMAN -> m_gameLogic = new Hangman((BasePlayer) m_player, "", m_gameLogicToBot);
+            case HANGMAN -> m_gameLogic = new Hangman((BasePlayer) m_player, "", m_gameLogicToBot, this);
             default -> throw new IllegalStateException();
         }
         m_gameThread = new Thread((Runnable) m_gameLogic);

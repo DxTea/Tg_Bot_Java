@@ -1,6 +1,8 @@
 package Games;
 
+import bot.GameHandler;
 import bot.GameLogicToBot;
+import bot.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,7 @@ public class Hangman extends BaseGameLogic {
      * количество жизней
      */
     private int lives = 5;
-    private boolean exitFlag;
+//    private boolean exitFlag;
     /**
      * скрытое слово
      */
@@ -34,13 +36,14 @@ public class Hangman extends BaseGameLogic {
     private final List<Character> mistakes;
 
     private final BasePlayer currentPlayer;
+    private final GameHandler currentLobby;
 
     /**
      * конструктор
      *
      * @param word зашифрованное слово
      */
-    public Hangman(BasePlayer player, String word, GameLogicToBot logic) {
+    public Hangman(BasePlayer player, String word, GameLogicToBot logic, GameHandler lobby) {
         super(player);
         currentPlayer = player;
         gameLogicToBot = logic;
@@ -50,7 +53,7 @@ public class Hangman extends BaseGameLogic {
             progress.add(hiddenWordMask);
         }
         mistakes = new ArrayList<>();
-        exitFlag = false;
+        currentLobby = lobby;
     }
 
     /**
@@ -90,10 +93,11 @@ public class Hangman extends BaseGameLogic {
         String difficult = chooseDifficulty();
         Hangman currentGame;
         String word = generateWord(difficult);
-        while (!exitFlag) {
-            currentGame = new Hangman(currentPlayer, word, gameLogicToBot);
+        while (!defineEndOfGame()) {
+            currentGame = new Hangman(currentPlayer, word, gameLogicToBot, currentLobby);
             currentGame.play();
         }
+        sendToUser(new String[]{"/restart", "/quit_game"}, currentPlayer.getPlayerName(), true);
     }
 
     private String chooseDifficulty() {
@@ -158,7 +162,7 @@ public class Hangman extends BaseGameLogic {
         if (--lives == 0) {
             String[] msg = new String[]{"\n" + LOOSE.getOutput()};
             sendToUser(msg, currentPlayer.getPlayerName(), false);
-            exitFlag = true;
+            currentLobby.exitFlag = true;
             return true;
         }
         return false;
@@ -168,7 +172,7 @@ public class Hangman extends BaseGameLogic {
         if (!progress.contains(hiddenWordMask)) {
             String[] msg = new String[]{WIN.getOutput()};
             sendToUser(msg, currentPlayer.getPlayerName(), false);
-            exitFlag = true;
+            currentLobby.exitFlag = true;
             return true;
         }
         return false;
@@ -220,7 +224,7 @@ public class Hangman extends BaseGameLogic {
 
     @Override
     public boolean defineEndOfGame() {
-        return exitFlag;
+        return currentLobby.exitFlag;
     }
 
     @Override
