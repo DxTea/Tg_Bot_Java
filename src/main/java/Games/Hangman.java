@@ -5,6 +5,7 @@ import bot.GameLogicToBot;
 import bot.Message;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static Messeges.OutputMessages.*;
@@ -55,21 +56,7 @@ public class Hangman extends BaseGameLogic {
         currentLobby = lobby;
     }
 
-    /**
-     * набор слов для игры
-     */
-    private static final String[] wordsEasy = {
-            "пальто", "лопата",
-            "зебра", "магазин"
-    };
-    private static final String[] wordsMedium = {
-            "коромысло", "леопард", "ноутбук", "конфета", "телефон"
-    };
-    private static final String[] wordsHard = {
-            "одиночество",
-            "коромысло", "влюблённость",
-            "рефакторинг", "человечество"   //сделать нормальный словарь для слов (Даша сказала, что лучше подключить библиотеку какую-нибудь)
-    };
+
 
     /**
      * случайный выбор слова
@@ -78,9 +65,9 @@ public class Hangman extends BaseGameLogic {
      */
     public static String generateWord(String difficult) {
         return switch (difficult) {
-            case ("1") -> wordsEasy[(int) (Math.random() * wordsEasy.length)];
-            case ("2") -> wordsMedium[(int) (Math.random() * wordsMedium.length)];
-            case ("3") -> wordsHard[(int) (Math.random() * wordsHard.length)];
+            case ("/easy") -> Dictionary.wordsEasy[(int) (Math.random() * Dictionary.wordsEasy.length)];
+            case ("/medium") -> Dictionary.wordsMedium[(int) (Math.random() * Dictionary.wordsMedium.length)];
+            case ("/hard") -> Dictionary.wordsHard[(int) (Math.random() * Dictionary.wordsHard.length)];
             default -> throw new IllegalStateException("Unexpected value: " + difficult);
         };
     }
@@ -100,7 +87,17 @@ public class Hangman extends BaseGameLogic {
     }
 
     private String chooseDifficulty() {
-        return "1";
+        String[] msg6 = new String[]{CHOOSE_DIFFICULT.getOutput()};
+        sendToUser(msg6, currentPlayer.getPlayerName(), false);
+        sendToUser(new String[]{"/easy", "/medium", "/hard"}, currentPlayer.getPlayerName(), true);
+        String difficult = getFromUser();
+        String[] listOfDif = {"/easy", "/medium", "/hard"};
+        if (!Arrays.asList(listOfDif).contains(difficult)){
+            String[] msg5 = new String[]{""+WRONG_DIFFICULT};
+            sendToUser(msg5, currentPlayer.getPlayerName(), false);
+            chooseDifficulty();
+        }
+        return difficult;
     }
 
     /**

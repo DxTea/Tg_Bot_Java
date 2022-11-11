@@ -2,7 +2,8 @@ package Messeges;
 
 
 public enum OutputMessages {
-    CHOOSE_DIFFICULT("Выберете сложность игры: \n 1) easy \n 2) medium \n 3) hard"),
+    WRONG_DIFFICULT("Нет такой сложности, попробуй ещё раз"),
+    CHOOSE_DIFFICULT("Выберете сложность игры:"),
     RIGHT("Правильно!"),
     WRONG("Неправильно!"),
     WIN("Вы выиграли!"),
