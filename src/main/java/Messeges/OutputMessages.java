@@ -1,8 +1,6 @@
 package Messeges;
 
-/**
- * сообщения бота для пользователя
- */
+
 public enum OutputMessages {
     CHOOSE_DIFFICULT("Выберете сложность игры: \n 1) easy \n 2) medium \n 3) hard"),
     RIGHT("Правильно!"),
@@ -15,15 +13,9 @@ public enum OutputMessages {
     ANSWER("Это было слово: "),
     WORD("Слово: "),
     LIFE("Жизни: "),
-    DESCRIPTION_LINE("Это телеграмм-бот с играми"),
-    HELP_LINE("Список команд: \n /start- для запуска бота \n /exit- для выхода из бота \n /help- справочная информация \n введите любой символ чтобы продолжить"),
-    NO_GAME_SELECTED("Вы не выбрали никакой игры"),
-    WANT_TRY_AGAIN_MENU("Хотите попробовать еще раз? \n 1) Да \n 2) Главное меню \n 3) Выход из бота"),
+    HELP_LINE("Это игровой телеграмм бот. Чтобы взаимодействовать с ним, используй предложенные комманды и следуй указаниям бота"),
     CHOOSE_GAME_MENU("Выберите вашу игру: \nвведите номер \n 1) Hangman  \n 2) TicTacToe  \n 3) BattleshipWar  \n 4) назад"),
-    HELLO_LINE("\nПривет!"),
-    HELLO_MENU("Введите '/help' чтобы получить информацию о боте. \nИли введите '/start'."),
-    WRONG_COMMAND_LINE("Неправильная команда"),
-    WRONG_NAME("Неправильное имя"),
+    GAME_START_LINE("Игра началась!"),
     USER_TICTACTOE_HELP_LINE("Введите номер столбца и строки через пробел или с новой строки"),
     USER_TICTACTOE_TRY_AGAIN_LINE("Что-то не так. Введите повторно"),
     USER_TICTACTOE_CHOOSE_CHAR_LINE("Если хотите играть крестиками - введите x, иначе o (по английски)"),
@@ -38,7 +30,9 @@ public enum OutputMessages {
     SHOT_X(", введите x координату выстрела"),
     SHOT_Y(", введите y координату выстрела"),
     RIGHT_SHOT("Попал!"),
-    BAD_SHOT("Мимо!");
+    BAD_SHOT("Мимо!"),
+    START_BOT("Привет! Это телеграмм-бот, в котором можно поиграть в виселицу, начинай!"),
+    START_HANGMAN("Чтобы начать игру, нажми на команду /start_game \n Если игра не запускается, нажми /exit и начни все сначала");
 
     private final String output;
 

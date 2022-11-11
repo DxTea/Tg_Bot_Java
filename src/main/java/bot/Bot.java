@@ -12,6 +12,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.*;
 
+import static Messeges.OutputMessages.*;
+
 public class Bot extends TelegramLongPollingBot {
     private final String token = "5042608301:AAHmlep4BboIBpE9yKwbFh-Ht0N4mwTuPnA";
     private final String botUsername = "T1LER_bot";
@@ -24,9 +26,7 @@ public class Bot extends TelegramLongPollingBot {
     private final String startCommand = "/start";
     private final String helpCommand = "/help";
     private final String exitCommand = "/exit";
-    private final String startTicTacToeCommand = "/start_TicTacToe"; // createLobbyTicTacToe
     private final String startHangmanCommand = "/start_Hangman"; // createLobbyHangmanCommand
-    private final String startBattleshipWarCommand = "/start_BattleshipWar"; // createLobbyBattleshipWarCommand
     private final String showLobbiesCommand = "/show_lobbies";
     private final String[] standardCommands = {startCommand, helpCommand, exitCommand};
     private final String[] standardGameCommands = {startHangmanCommand};
@@ -65,9 +65,9 @@ public class Bot extends TelegramLongPollingBot {
         switch (messageFromInput) {
             case startCommand -> sendOutputToUser(currentUser,
                     standardGameCommands,
-                    "Привет! Это телеграмм-бот, в котором можно поиграть в виселицу, начинай!", true);
+                    START_BOT.getOutput(), true);
             case helpCommand -> sendOutputToUser(currentUser, standardCommands,
-                    "Нажми старт", true);
+                    HELP_LINE.getOutput(), true);
             case exitCommand -> killLobby(currentUser);
             case startHangmanCommand -> createLobby(currentUser, GameName.HANGMAN);
         }
@@ -98,7 +98,7 @@ public class Bot extends TelegramLongPollingBot {
         lobbies.remove(lobby);
     }
 
-    public void killAllLobbies() {
+    public void killAllLobbies() { //возникает неизвестная ошибка
         for (GameHandler lobby : lobbies){
             sendOutputToUser(lobby.m_creator, standardCommands, "_", true);
             lobbies.remove(lobby);

@@ -21,7 +21,6 @@ public class Hangman extends BaseGameLogic {
      * количество жизней
      */
     private int lives = 5;
-//    private boolean exitFlag;
     /**
      * скрытое слово
      */
@@ -69,7 +68,7 @@ public class Hangman extends BaseGameLogic {
     private static final String[] wordsHard = {
             "одиночество",
             "коромысло", "влюблённость",
-            "рефакторинг", "человечество"
+            "рефакторинг", "человечество"   //сделать нормальный словарь для слов (Даша сказала, что лучше подключить библиотеку какую-нибудь)
     };
 
     /**
@@ -119,7 +118,7 @@ public class Hangman extends BaseGameLogic {
 //        String[] msg = new String[]{ANSWER.getOutput() + hiddenWord.toUpperCase() + "\n"};
         String[] msg = new String[]{ANSWER.getOutput() + hiddenWord.toUpperCase()};
         sendToUser(msg, currentPlayer.getPlayerName(), false);
-//        exitFlag = false;
+
     }
 
     private boolean checkCorrectInput(String input) {
@@ -202,8 +201,6 @@ public class Hangman extends BaseGameLogic {
         String[] msg1 = new String[1];
         msg1[0] = "";
         for (char letter : progress) {
-//            String[] msg1 = new String[]{" " + letter};
-//            sendToUser(msg1, currentPlayer.getPlayerName(), false);
             msg1[0] = msg1[0] + " " + letter;
         }
         sendToUser(msg1, currentPlayer.getPlayerName(), false);
@@ -212,14 +209,11 @@ public class Hangman extends BaseGameLogic {
         sendToUser(msg2, currentPlayer.getPlayerName(), false);
         String[] msg3 = new String[lives];
         for (int i = 0; i < lives; i++) {
-//            String[] msg3 = new String[]{"💙"};
-//            sendToUser(msg3, currentPlayer.getPlayerName(), false);
             msg3[i] = "💙";
         }
         sendToUser(msg3, currentPlayer.getPlayerName(), false);
 
-//        String[] msg4 = new String[]{"\n\n\n" + INPUT.getOutput()};
-//        sendToUser(msg4, currentPlayer.getPlayerName(), false);
+
     }
 
     @Override

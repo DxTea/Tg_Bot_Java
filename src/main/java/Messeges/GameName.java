@@ -1,8 +1,6 @@
 package Messeges;
 
-/**
- * список игр бота
- */
+
 public enum GameName {
     HANGMAN("1"),
     TICTACTOE("2"),

@@ -2,7 +2,7 @@ package Games;
 
 import java.util.Scanner;
 
-import static Menu.BotController.*;
+
 import static Messeges.OutputMessages.*;
 import static java.lang.System.in;
 import static java.lang.System.out;

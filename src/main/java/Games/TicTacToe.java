@@ -1,11 +1,11 @@
 package Games;
 
-import bot.Channel;
+
 
 import java.util.Random;
 import java.util.Scanner;
 
-import static Menu.BotController.*;
+
 import static Messeges.OutputMessages.*;
 import static java.lang.System.*;
 
@@ -13,7 +13,6 @@ import static java.lang.System.*;
  * класс реализации игры "Крестики - Нолики"
  */
 public class TicTacToe implements Game {
-    public Channel channel;
     private final Random random = new Random();
     private final Scanner scanner = new Scanner(in);
     /**

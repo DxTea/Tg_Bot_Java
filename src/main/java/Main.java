@@ -4,9 +4,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 import bot.Bot;
 
-/**
- * основной класс
- */
+
 public class Main {
     public static void main(String[] args) {
         // Instantiate Telegram Bots API

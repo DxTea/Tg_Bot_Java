@@ -6,6 +6,9 @@ import Messeges.GameName;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import static Messeges.OutputMessages.GAME_START_LINE;
+import static Messeges.OutputMessages.START_HANGMAN;
+
 public class GameHandler implements Runnable{
     public Map<String, String> m_playerNameToChatId;
     public ConcurrentLinkedQueue<Message> m_playerMessages;
@@ -64,12 +67,6 @@ public class GameHandler implements Runnable{
                     }
                     ifPlayerAskQuit(message);
                     m_gameLogicToBot.setInputMessage(message.m_message);
-
-//                    if (message.m_message.startsWith(startPrefix)) continue;
-//                    m_availableCommandsInGame = m_gameLogicToBot.getAvailableCommands();
-//                    sendOutputToUser(message.m_playerName, m_defaultCommands,
-//                            "Что-то пошло не так! Error 404",
-//                            true);
                 }
             }
             try {
@@ -82,8 +79,7 @@ public class GameHandler implements Runnable{
 
     private void ifPlayerAsksHelp(Message message) {
         if (isEquals(message, helpCommand)){
-            sendOutputToUser(message.m_playerName, availableCommands, "Чтобы начать игру, нажми на команду /start_game" +
-                    "\n" + "Если игра не запускается, нажми /exit и начни все сначала", true);
+            sendOutputToUser(message.m_playerName, availableCommands, START_HANGMAN.getOutput(), true);
         }
     }
 
@@ -122,7 +118,7 @@ public class GameHandler implements Runnable{
         m_gameThread = new Thread((Runnable) m_gameLogic);
         m_gameStarted = true;
         sendOutputToUser(this.m_creator, m_availableCommandsInGame,
-                "Игра началась", true);
+                GAME_START_LINE.getOutput(), true);
         try {
             Thread.sleep(50);
         } catch (InterruptedException e) {
