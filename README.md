@@ -1,4 +1,4 @@
 # TO DO LIST
-[] уровни сложности 
-[] fix hidden mask bug
-[] enum constans 
+[ ] уровни сложности 
+[ ] fix hidden mask bug
+[ ] enum constans 
