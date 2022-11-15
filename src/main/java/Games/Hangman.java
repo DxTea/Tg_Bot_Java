@@ -77,6 +77,7 @@ public class Hangman extends BaseGameLogic {
      */
     public void start() {
         String difficult = chooseDifficulty();
+        sendToUser(new String[]{"/quit_game"}, currentPlayer.getPlayerName(), true);
         Hangman currentGame;
         String word = generateWord(difficult);
         while (!defineEndOfGame()) {
@@ -89,7 +90,7 @@ public class Hangman extends BaseGameLogic {
     private String chooseDifficulty() {
         String[] msg6 = new String[]{CHOOSE_DIFFICULT.getOutput()};
         sendToUser(msg6, currentPlayer.getPlayerName(), false);
-        sendToUser(new String[]{"/easy", "/medium", "/hard"}, currentPlayer.getPlayerName(), true);
+        sendToUser(new String[]{"/easy", "/medium", "/hard", "/quit_game"}, currentPlayer.getPlayerName(), true);
         String difficult = getFromUser();
         String[] listOfDif = {"/easy", "/medium", "/hard"};
         if (!Arrays.asList(listOfDif).contains(difficult)){
@@ -174,12 +175,6 @@ public class Hangman extends BaseGameLogic {
         return false;
     }
 
-    /**
-     * проверяем наличие введенного символа в слове
-     *
-     * @param userVariant буква пользователя
-     * @return true, если буква есть, иначе false
-     */
     private boolean checkGuess(char userVariant) {
         boolean guessed = false;
         for (int index = hiddenWord.indexOf(userVariant); index >= 0; index = hiddenWord.indexOf(userVariant, index + 1)) {
@@ -189,9 +184,6 @@ public class Hangman extends BaseGameLogic {
         return guessed;
     }
 
-    /**
-     * метод показывает прогресс слова, оставшиеся жизни и запрашивает ввод новой буквы
-     */
     private void printProgress() {
         String[] msg = new String[]{WORD.getOutput()};
         sendToUser(msg, currentPlayer.getPlayerName(), false);
