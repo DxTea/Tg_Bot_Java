@@ -46,7 +46,7 @@ target/classes/bot/BotInfo.class
 .idea/libraries/Maven__org_opentest4j_opentest4j_1_1_1.xml
 .idea/modules.xml
 .idea/Tg_Bot.iml
-.src/main/java/bot/BotInfo.java
+.src/main/java/bot/BotInfo.class
 .idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_11_3.xml
 .idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_11_3.xml
 .idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_11_3.xml
