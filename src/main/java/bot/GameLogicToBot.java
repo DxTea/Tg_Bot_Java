@@ -38,9 +38,9 @@ public class GameLogicToBot {
         m_inputToGameLogic = m_message;
     }
 
-    public void killLobby(){ m_telegramBot.killLobby(m_currentPlayer.getPlayerName());}
+    public void removeLobby(){ m_telegramBot.removeLobby(m_currentPlayer.getPlayerName());}
 
-    public void killAllLobbies(){ m_telegramBot.killAllLobbies();}
+    public void removeAllLobbies(){ m_telegramBot.removeAllLobbies();}
 
     public Player getCurrentPlayer(){ return m_currentPlayer;}
 

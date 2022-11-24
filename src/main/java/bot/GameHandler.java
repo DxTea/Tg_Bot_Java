@@ -12,7 +12,6 @@ import static Messeges.OutputMessages.START_HANGMAN;
 public class GameHandler implements Runnable{
     public Map<String, String> m_playerNameToChatId;
     public ConcurrentLinkedQueue<Message> m_playerMessages;
-    private Thread m_gameThread;
     private BaseGameLogic m_gameLogic;
     public volatile boolean exitFlag;
 
@@ -25,10 +24,9 @@ public class GameHandler implements Runnable{
     private final String quitGameCommand = "/quit_game";
     private final String helpCommand = "/help";
     private final String exitCommand = "/exit";
-    private final String restartCommand = "/restart";
     private final String[] availableCommands = {startGameCommand, helpCommand, exitCommand};
     private final String[] m_defaultCommands = {helpCommand, exitCommand};
-    private String[] m_availableCommandsInGame = {quitGameCommand};
+    private final String[] m_availableCommandsInGame = {quitGameCommand};
     private boolean m_gameStarted;
 
     public GameHandler(String creator, String chatId, Player player,
@@ -91,13 +89,14 @@ public class GameHandler implements Runnable{
 
     private void ifPlayerAskExit(Message message) {
         if (isEquals(message, exitCommand)) {
-            m_gameLogicToBot.killAllLobbies();
+            m_gameLogicToBot.removeAllLobbies();
         }
     }
 
     private void ifPlayerAskRestart(Message message) {
+        String restartCommand = "/restart";
         if (isEquals(message, restartCommand)) {
-            m_gameLogicToBot.killLobby();
+            m_gameLogicToBot.removeLobby();
             exitFlag = false;
             establishAndStartGameThread();
         }
@@ -106,7 +105,7 @@ public class GameHandler implements Runnable{
     private void ifPlayerAskQuit(Message message) {
         if (isEquals(message, quitGameCommand)) {
             exitFlag = true;
-            m_gameLogicToBot.killAllLobbies();
+            m_gameLogicToBot.removeAllLobbies();
         }
     }
 
@@ -115,7 +114,7 @@ public class GameHandler implements Runnable{
             case HANGMAN -> m_gameLogic = new Hangman((BasePlayer) m_player, "", m_gameLogicToBot, this);
             default -> throw new IllegalStateException();
         }
-        m_gameThread = new Thread((Runnable) m_gameLogic);
+        Thread m_gameThread = new Thread(m_gameLogic);
         m_gameStarted = true;
         sendOutputToUser(this.m_creator, m_availableCommandsInGame,
                 GAME_START_LINE.getOutput(), true);

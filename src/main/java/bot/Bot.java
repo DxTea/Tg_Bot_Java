@@ -15,21 +15,21 @@ import java.util.*;
 import static Messeges.OutputMessages.*;
 
 public class Bot extends TelegramLongPollingBot {
-    private final String token = "5042608301:AAHmlep4BboIBpE9yKwbFh-Ht0N4mwTuPnA";
-    private final String botUsername = "T1LER_bot";
+    private final String token = BotInfo.getBotToken();
+    private final String botUsername = BotInfo.getBotUsername();
 
     private final Map<String, String> playerNameToChatId = new HashMap<>();
     private final List<GameHandler> lobbies = new ArrayList<>();
     private boolean isGameChosen = false;
 
     private String[] currentAvailableCommands; // for checking if player answered expectedly
-    private final String startCommand = "/start";
-    private final String helpCommand = "/help";
-    private final String exitCommand = "/exit";
-    private final String startHangmanCommand = "/start_Hangman"; // createLobbyHangmanCommand
-    private final String showLobbiesCommand = "/show_lobbies";
-    private final String[] standardCommands = {startCommand, helpCommand, exitCommand};
-    private final String[] standardGameCommands = {startHangmanCommand};
+    private static final String startCommand = "/start";
+    private static final String helpCommand = "/help";
+    private static final String exitCommand = "/exit";
+    private static final String startHangmanCommand = "/start_Hangman"; // createLobbyHangmanCommand
+    private static final String showLobbiesCommand = "/show_lobbies";
+    private static final String[] standardCommands = {startCommand, helpCommand, exitCommand};
+    private static final String[] standardGameCommands = {startHangmanCommand};
 
     @Override
     public String getBotUsername() {
@@ -68,7 +68,7 @@ public class Bot extends TelegramLongPollingBot {
                     START_BOT.getOutput(), true);
             case helpCommand -> sendOutputToUser(currentUser, standardCommands,
                     HELP_LINE.getOutput(), true);
-            case exitCommand -> killLobby(currentUser);
+            case exitCommand -> removeLobby(currentUser);
             case startHangmanCommand -> createLobby(currentUser, GameName.HANGMAN);
         }
     }
@@ -81,8 +81,7 @@ public class Bot extends TelegramLongPollingBot {
 
     private static GameHandler getLobby(String currentUser, String chatId, GameName game, Bot telegramBot) {
         Player player = new BasePlayer(currentUser);
-        GameHandler lobby = new GameHandler(currentUser, chatId, player, new GameLogicToBot(telegramBot), game);
-        return lobby;
+        return new GameHandler(currentUser, chatId, player, new GameLogicToBot(telegramBot), game);
     }
 
     private void startLobbyThread(GameHandler lobby) {
@@ -90,7 +89,7 @@ public class Bot extends TelegramLongPollingBot {
         lobbyThread.start();
     }
 
-    public void killLobby(String currentUser) {
+    public void removeLobby(String currentUser) {
         String chatID = playerNameToChatId.get(currentUser);
         GameName game = GameName.HANGMAN;
         GameHandler lobby = getLobby(currentUser, chatID, game, this);
@@ -98,7 +97,7 @@ public class Bot extends TelegramLongPollingBot {
         lobbies.remove(lobby);
     }
 
-    public void killAllLobbies() { //возникает неизвестная ошибка
+    public void removeAllLobbies() { //возникает неизвестная ошибка
         for (GameHandler lobby : lobbies){
             sendOutputToUser(lobby.m_creator, standardCommands, "_", true);
             lobbies.remove(lobby);
