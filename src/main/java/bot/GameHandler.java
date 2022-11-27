@@ -11,6 +11,7 @@ import static Messeges.OutputMessages.START_HANGMAN;
 
 public class GameHandler implements Runnable{
     public Map<String, String> m_playerNameToChatId;
+    public Map<String, BaseGameLogic> m_playerNameToGame;
     public ConcurrentLinkedQueue<Message> m_playerMessages;
     private BaseGameLogic m_gameLogic;
     public volatile boolean exitFlag;
@@ -36,6 +37,7 @@ public class GameHandler implements Runnable{
         m_gameLogicToBot = gameLogicToBot;
         m_game = game;
         m_playerNameToChatId = new HashMap<>();
+        m_playerNameToGame = new HashMap<>();
         m_playerMessages = new ConcurrentLinkedQueue<>();
         m_playerNameToChatId.put(creator, chatId);
         m_gameStarted = false;
@@ -53,7 +55,7 @@ public class GameHandler implements Runnable{
         while (true) {
             while (!m_playerMessages.isEmpty()) {
                 Message message = m_playerMessages.poll();
-                if (!m_gameStarted) {
+                if (!m_gameStarted) {                 // extract to GameManager.java
                     ifPlayerAsksHelp(message);
                     ifGameStarts(message);
                     ifPlayerAskExit(message);
@@ -110,10 +112,13 @@ public class GameHandler implements Runnable{
     }
 
     private void establishAndStartGameThread() {
-        switch (m_game) {
-            case HANGMAN -> m_gameLogic = new Hangman((BasePlayer) m_player, "", m_gameLogicToBot, this);
+        switch (m_game) { // extract to GameManager.java
+            case HANGMAN -> {
+                m_gameLogic = new Hangman((BasePlayer) m_player, "", m_gameLogicToBot, this);
+            }
             default -> throw new IllegalStateException();
         }
+        m_playerNameToGame.put(((BasePlayer) m_player).name, m_gameLogic);
         Thread m_gameThread = new Thread(m_gameLogic);
         m_gameStarted = true;
         sendOutputToUser(this.m_creator, m_availableCommandsInGame,
