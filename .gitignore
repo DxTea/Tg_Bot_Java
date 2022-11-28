@@ -117,3 +117,5 @@ target/classes/bot/MessageHandler.class
 target/classes/Command/StartBattleShipWar.class
 target/classes/Command/StartHangman.class
 target/classes/Command/StartTicTacToe.class
+/src/main/java/bot/BotInfo.java
+/Tg_Bot.iml

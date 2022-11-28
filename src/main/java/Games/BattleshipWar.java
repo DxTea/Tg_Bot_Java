@@ -1,5 +1,6 @@
 package Games;
 
+import java.util.Random;
 import java.util.Scanner;
 
 
@@ -9,6 +10,7 @@ import static java.lang.System.out;
 
 public class BattleshipWar implements Game{
     private static Scanner scanner = new Scanner(in);
+    private static Random random = new Random();
     /**
      * размер игрового поля
      */
@@ -16,27 +18,27 @@ public class BattleshipWar implements Game{
     /**
      * имя 1 игрока
      */
-    private String player1Name;
+    private String playerName = "игрок";
     /**
-     * имя второго игрока
+     * имя компьютер
      */
-    private String player2Name;
+    private String AIName = "компьютер";
     /**
      * карта игрока 1
      */
-    private char[][] playerField1 = new char[FIELD_LENGTH][FIELD_LENGTH];
+    private char[][] playerField = new char[FIELD_LENGTH][FIELD_LENGTH];
     /**
      * карта игрока 2
      */
-    private char[][] playerField2 = new char[FIELD_LENGTH][FIELD_LENGTH];
+    private char[][] AIField = new char[FIELD_LENGTH][FIELD_LENGTH];
     /**
      * карта выстрелов игрока 1
      */
-    private char[][] playerBattleField1 = new char[FIELD_LENGTH][FIELD_LENGTH];
+    private char[][] playerBattleField = new char[FIELD_LENGTH][FIELD_LENGTH];
     /**
      * карта выстрелов игрока 1
      */
-    private char[][] playerBattleField2 = new char[FIELD_LENGTH][FIELD_LENGTH];
+    private char[][] AIBattleField = new char[FIELD_LENGTH][FIELD_LENGTH];
     /**
      * символ пустой клетки
      */
@@ -62,16 +64,16 @@ public class BattleshipWar implements Game{
         currentGame.play();
     }
 
-    /**
-     * инициализация имен игроков
-     */
-    private void initializeNames() {
-        out.println(NAME1.getOutput());
-        player1Name = scanner.nextLine();
-
-        out.println(NAME2.getOutput());
-        player2Name = scanner.nextLine();
-    }
+//    /**
+//     * инициализация имен игроков
+//     */
+//    private void initializeNames() {
+//        out.println(NAME1.getOutput());
+//        player1Name = scanner.nextLine();
+//
+//        out.println(NAME2.getOutput());
+//        player2Name = scanner.nextLine();
+//    }
 
     /**
      * расстановка кораблей
@@ -121,6 +123,46 @@ public class BattleshipWar implements Game{
     }
 
     /**
+     * расстановка кораблей компьютера
+     * @param AIField игровое поле
+     */
+    private static void fillAIField(char[][] AIField) {
+        int x = 0;
+        int y = 0;
+        int position = 0;
+        for (int i = 4; i >= 1; i--) {
+            for (int k = 1; k <= 5 - i; k++) {
+                int validationResult = 1;
+                while (validationResult != 0) {
+                    x = random.nextInt(1, 11);
+                    y = random.nextInt(1, 11);
+
+                    if (i != 1) {
+                        position = random.nextInt(1, 3);
+                    }
+                    else {
+                        position = 1;
+                    }
+                    validationResult = validateCoordForShip(AIField, x, y, position, i);
+                }
+
+                if (position == 1) {
+                    for (int q = 0; q < i; q++) {
+                        AIField[y][x + q] = shipSymbol;
+                    }
+                }
+
+                if (position == 2) {
+                    for (int m = 0; m < i; m++) {
+                        AIField[y + m][x] = shipSymbol;
+                    }
+                }
+                char [][] emptyBattleField = new char[12][2];
+            }
+        }
+    }
+
+    /**
      * вывод игрового поля
      */
     static void printField(char[][] field, char[][] battleField) {
@@ -140,40 +182,48 @@ public class BattleshipWar implements Game{
         }
     }
 
+    public static void main(String[] args){
+        start();
+    }
+
     /**
      * основная логика игры
      */
     @Override
     public void play() {
-        initializeNames();
-        fillPlayerField(playerField1);
-        out.println("Игрок " + player1Name + " заполнил игровое поле.");
-        out.println("Очередь игрока " + player2Name + "!");
-        fillPlayerField(playerField2);
+        fillPlayerField(playerField);
+        out.println("Вы заполнили игровое поле.");
+        fillAIField(AIField);
 
-        String currentPlayerName = player1Name;
-        char[][] currentPlayerField = playerField2;
-        char[][] currentPlayerBattleField = playerBattleField1;
+        String currentPlayerName = playerName;
+        char[][] currentPlayerField = AIField;
+        char[][] currentPlayerBattleField = playerBattleField;
 
-        while (isPlayerAlive(playerField1) && isPlayerAlive(playerField2)) {
+        while (isPlayerAlive(playerField) && isPlayerAlive(AIField)) {
             out.println(currentPlayerName + SHOT_X.getOutput());
             int xShot = scanner.nextInt();
             out.println(currentPlayerName + SHOT_Y.getOutput());
             int yShot = scanner.nextInt();
 
             int shotResult = handleShot(currentPlayerBattleField, currentPlayerField, xShot, yShot);
+            printField(playerBattleField, playerField);
 
-            if (shotResult == 0 && currentPlayerName == player1Name) {
-                currentPlayerName = player2Name;
-                currentPlayerField = playerField1;
-                currentPlayerBattleField = playerBattleField2;
-            } else if (shotResult == 0 && currentPlayerName == player2Name) {
-                currentPlayerName = player1Name;
-                currentPlayerField = playerField2;
-                currentPlayerBattleField = playerBattleField1;
+            if (shotResult == 0) {
+                out.println("Ход компьютера!");
+                AITurn();
+                out.println("Компьютер закончил!");
             }
         }
         out.println(currentPlayerName + " выиграл!");
+    }
+
+    private void AITurn() {
+        int shotResult = -1;
+        while (shotResult != 0) {
+            int xShot = random.nextInt(1, 11);
+            int yShot = random.nextInt(1, 11);
+            shotResult = handleShot(AIBattleField, playerField, xShot, yShot);
+        }
     }
 
     /**
@@ -184,14 +234,10 @@ public class BattleshipWar implements Game{
             field[y][x] = hitSymbol;
             battleField[y][x] = hitSymbol;
             out.println(RIGHT_SHOT.getOutput());
-            printField(field, battleField);
-            out.println("Следующий выстрел за тобой!");
             return 1;
         }
         battleField[y][x] = pastSymbol;
         out.println(BAD_SHOT.getOutput());
-        printField(field, battleField);
-        out.println("Очередь другого игрока!");
         return 0;
     }
 
